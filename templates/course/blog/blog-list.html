@@ -1,0 +1,807 @@
+{% extends "course/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.snow.css" rel="stylesheet" />
+<style>
+    .main-item {
+ padding: 10px;
+ background-color: #fff;
+ width: 100%;
+}
+a{
+ text-decoration: none;
+}
+.background-masker {
+ background-color: #fff;
+ position: absolute;
+}
+
+.btn-divide-left {
+ top: 0;
+ left: 25%;
+ height: 100%;
+ width: 5%;
+}
+
+@keyframes placeHolderShimmer {
+ 0% {
+   background-position: -800px 0
+ }
+ 100% {
+   background-position: 800px 0
+ }
+}
+
+.animated-background {
+ animation-duration: 2s;
+ animation-fill-mode: forwards;
+ animation-iteration-count: infinite;
+ animation-name: placeHolderShimmer;
+ animation-timing-function: linear;
+ background-color: #f6f7f8;
+ background: linear-gradient(to right, #eeeeee 8%, #bbbbbb 18%, #eeeeee 33%);
+ background-size: 800px 104px;
+ height: 70px;
+ position: relative;
+}
+
+.static-background {
+ background-color: #f6f7f8;
+ background-size: 800px 104px;
+ height: 70px;
+ position: relative;
+ margin-bottom: 20px;
+}
+
+.shared-dom {
+width: 100%;
+ height: 110px;
+}
+.sub-rect {
+ border-radius: 100%;
+ width: 100%;
+ height: 70px;
+ float: left;
+ margin: 20px 20px 20px 0;
+}
+.pure-background {
+ background-color: #eee;
+}
+
+.css-dom:empty {
+ width: 100%;
+ height: 220px;
+ border-radius: 6px;
+ box-shadow: 0 10px 45px rgba(0, 0, 0, .2);
+ background-repeat: no-repeat;
+ 
+ background-image:
+   radial-gradient(circle 16px, lightgray 99%, transparent 0),
+   linear-gradient(lightgray, lightgray),
+   linear-gradient(lightgray, lightgray),
+   linear-gradient(lightgray, lightgray),
+   linear-gradient(lightgray, lightgray),
+   linear-gradient(#fff, #fff); 
+ 
+ background-size:
+   32px 32px,
+   200px 32px,
+   180px 32px,
+   230px 16px,
+   100% 40px,
+   280px 100%;
+ 
+ background-position:
+   24px 30px,
+   66px 30px,
+   24px 90px,
+   24px 142px,
+   0 180px,
+   0 0;
+}
+
+
+</style>
+<style>
+  .contentTextGradient {
+    position: relative;
+  }
+
+  .contentTextGradient::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px; /* Geçişli alanın yüksekliği */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)); /* Şeffafdan opak hale geçiş */
+  }
+</style>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f7f7;
+      margin: 0;
+    }
+    .search-result {
+      background-color: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    .search-result h2 {
+      margin-top: 0;
+    }
+    .search-result p {
+      margin-bottom: 10px;
+    }
+    .search-result cite {
+      color: #006621;
+      font-size: 14px;
+    }
+    .search-result .description {
+      color: #545454;
+    }
+    .search-result .url {
+      color: #006621;
+      font-size: 14px;
+    }
+  </style>
+  <script>
+    var form_blog_id = null;
+    var form_comment_id  = null;
+  </script>
+
+
+<div class="lg:pt-16" style="background: #374151;">
+
+  <div class="container m-auto px-4">
+      
+      <div class="md:flex justify-between items-center">
+          <div class="md:w-6/12 md:text-left text-center">
+             
+             <div style="color: #eee;"  class="md:text-3xl text-xl font-semibold mb-7">Aradığını Bul </div>
+
+             <form onsubmit="searchFormSubmit(event)" method="post" class="js-focus-state input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="askQuestions">
+                  <span class="fas fa-search"></span>
+                </span>
+              </div>
+
+              <div class="input-with-icon border rounded-md">
+                  <i class="uil-search"></i>
+                  <input type="text" id="search" name="search" class="input-text" placeholder="Ara">
+              </div>  
+             </form>
+          </div>
+          
+      </div>
+ 
+  </div>
+
+  <div class="-mt-2 lg:block hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 220" class="fill-current" style="color: #f9f7f7;">
+        <path d="M918.34,99.41C388.23,343.6,47.11,117.12,0,87.54V220H1600V87.54C1378.72-76.71,1077.32,27.41,918.34,99.41Z">
+        </path>
+      </svg>
+  </div>
+ 
+
+</div>
+
+<div class="container">
+
+  <div class="lg:flex lg:space-x-4 lg:-mx-4">
+    <div class="lg:w-1/12 lg:space-y-6">
+       
+    </div>
+      <div  class="lg:w-10/12 lg:space-y-6">
+        <div class="row">
+            <div class="col-6" style="padding-left: 25px;"> <h4> {{ title }} <b id="article_count">0</b> Post</h4>  </div>
+            <div class="col-6" style="text-align: right; padding-right: 15px; padding-bottom: 15px;">
+              <button id="modalButton" class="bg-gray-700 border hover:text-black hover:bg-gray-300 px-4 py-1.5 rounded-full text-sm text-white" uk-toggle="target: #modal-close-default">Post Paylaş</button>
+          </div>
+        </div>
+        <div id="searchResults"></div>
+          <div style="padding-top: 20px;" class="main-item" id="loadingEfect">
+            <div class="static-background">
+            <div class="background-masker btn-divide-left"></div>
+            </div>
+            
+            <div class="animated-background">
+            <div class="background-masker btn-divide-left"></div>
+            </div>
+      
+        </div>
+        <div class="flex justify-center space-x-2 text-base font-semibold text-gray-400 items-center">
+          <button class="bg-gray-100 border hover:bg-gray-200 px-4 py-1.5 rounded-full text-sm"  id="loadMoreButton">Daha fazla göster</button>
+      </div>
+      </div>
+      <div class="lg:w-1/12 lg:space-y-6">
+       
+      </div>
+  </div>
+
+    <div  id="modal-close-default" uk-modal="" class="uk-modal" style="display: none; ">
+      <div class="uk-modal-dialog uk-modal-body rounded-md shadow-2xl">
+          <button id="closeModalButton" class="uk-modal-close-default bg-gray-100 p-2 rounded-full m-3 uk-icon uk-close" type="button" uk-close=""><svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" data-svg="close-icon"><line fill="none" stroke="#000" stroke-width="1.1" x1="1" y1="1" x2="13" y2="13"></line><line fill="none" stroke="#000" stroke-width="1.1" x1="13" y1="1" x2="1" y2="13"></line></svg></button>
+          <h2 class="mb-2 uk-modal-title">Post Paylaş</h2>
+          <form method="post" id="createForm" enctype="multipart/form-data">
+           
+            <label for="cats" class="font-medium self-center">Kategori <span class="text-red-600">*</span> </label>
+            <select required class="selectpicker border rounded-md col-span-2" name="cats" id="cats" multiple>
+                
+                <optgroup label="Kategoriler">
+                    {% for c in get_cats %}
+                    <option value="{{ c.id }}">{{ c.name }}</option> 
+                    {% endfor %}
+
+                </optgroup>
+                <optgroup label="AI Araç Kategorileri">
+                    {% for c in get_ai_cats %}
+                    <option value="{{ c.id }}">{{ c.name }}</option> 
+                    {% endfor %}
+                </optgroup> 
+            </select>
+
+            <label for="title" > Başlık <span class="text-red-600">*</span></label>
+            <div class="col-span-2">
+                <input type="text" id="title" name="title" class="shadow-none with-border" placeholder="Blog başlığı" required="">
+            </div>
+            
+            <label for="content" > İçerik <span class="text-red-600">*</span></label>
+            <div id="content">
+            </div>
+            <input type="text" name="content" id="content_input" hidden>
+
+            <!-- Course name --> 
+            <label for="vimeo_embed_link" > Video Embed Link (İsteğe bağlı)</label>
+            <div class="col-span-2">
+                <input type="text" id="vimeo_embed_link" name="vimeo_embed_link" class="shadow-none with-border" placeholder="Video Embed Link">
+            </div>
+            
+            <label for="banner" class="form-label">Görsel (İsteğe bağlı)</label>
+            <div class="mb-3">
+                <input class="form-control" type="file" name="banner" id="banner">
+              </div>
+            <div class="text-center" style="padding: 15px;">
+              <button type="submit" class="button">Gönder</button>
+            </div>
+          </div>
+
+         
+        </form>
+      </div>
+  </div>
+
+
+  <div  id="send_comment" uk-modal="" class="uk-modal" style="display: none; ">
+    <div class="uk-modal-dialog uk-modal-body rounded-md shadow-2xl bg-gray-100">
+        <button class="uk-modal-close-default bg-gray-300 p-2 rounded-full m-3 uk-icon uk-close" type="button" uk-close=""><svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" data-svg="close-icon"><line fill="none" stroke="#000" stroke-width="1.1" x1="1" y1="1" x2="13" y2="13"></line><line fill="none" stroke="#000" stroke-width="1.1" x1="13" y1="1" x2="1" y2="13"></line></svg></button>
+        <h2 class="mb-2 uk-modal-title">Yorum Yap</h2>
+        <form method="post" id="commentForm" >
+
+          <label for="message">Yorum*</label>
+          <div class="col-span-2">
+            <textarea class="with-border col-span-2 p-4 min-h-full resize-none" placeholder="Bir şeyler yaz..." id="message" name="message" type="text" rows="4" value="" required></textarea>
+            <p class="mt-2 text-sm text-gray-500"> Argo ve küfürlü yorumlar yasaklanmanıza yol açabilir.</p>
+        </div>
+
+        <div class="text-center" style="padding: 15px;">
+          <button type="submit" class="button">Gönder</button>
+        </div>
+      </form>
+    </div>
+</div>
+
+<script>
+        var next_page_link = null;
+        var loadMore = document.getElementById("loadMoreButton");
+        var url = "/api/blog";
+        var active_request = false;
+        $("#loadMoreButton").click(function(){
+          loadMore.disabled = true;
+          getArticles();
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+          loadMore.disabled = true;
+          getArticles();
+        });
+        var post_id = null;
+        {% if post_id %}
+        post_id = {{ post_id }};
+        {% endif %}
+        function getArticles(){
+          if (active_request == false){
+            active_request = true;
+          document.getElementById("loadingEfect").style.display = "block";
+          if (url == "/api/blog"){
+            get_data = {search:{% if q %}"{{ q }}"{% else %}document.getElementById("search").value{% endif %},post_id:post_id};
+            document.getElementById("searchResults").innerHTML = "";
+          }else{
+              get_data = {};
+          }
+          $.ajax({
+                  url: url,
+                  type: 'GET',
+                  contentType: 'application/json',
+                  data:get_data,
+                  dataType: 'json',
+                  success: function(response) {
+                      next_page_link = response.next;
+                      url = response.next;
+                      active_request = false;
+                      appendArticles(response);
+            },
+                  error: function(response){
+                    active_request = false;
+                  }
+
+        });
+      }
+
+        }
+
+        function searchFormSubmit(event){
+        url = '/api/blog';
+        event.preventDefault();
+        getArticles();
+
+    }
+
+        function appendArticles(response) {
+            //$("#searchResults").empty();
+            document.getElementById("loadingEfect").style.display = "block";
+              var postsContainer = $("#searchResults");
+              document.getElementById("article_count").textContent = response.count;
+              if (response.count < 1 ){
+                loadMore.disabled = true;
+                loadMore.textContent = "Gösterilecek daha fazla konu yok";
+                
+              }else{
+                loadMore.disabled = false;
+                loadMore.textContent = "Daha fazla göster";
+              }
+              if (Array.isArray(response.results) && response.results.length > 0){
+
+                
+                response.results.forEach(function (blog) {
+                var cats = "";
+                var like = false;
+
+                if (response.post_likes.indexOf(blog.id) !== -1) {
+                    var like = true;
+                } else {
+                  var like = false;
+                }
+
+                blog.category.forEach(function (cat) {
+                  cats += `<a href="/hizli-ogren/kategori/${cat[0]}/" class="bg-white px-3.5 py-1.5 rounded shadow text-sm">${cat[1]}</a>`;
+                });
+                var postHtml = `
+          
+                <div class="tube-card">
+                  ${ ( blog.video_embed_link && blog.video_embed_link !== "") || blog.banner   ? `
+<div class="h-44 mb-4 md:h-72 overflow-hidden relative rounded-t-lg w-full">
+  ${blog.video_embed_link !== null && blog.video_embed_link !== "" ? `
+  
+  <iframe width="100%" class="w-full h-full absolute inset-0 object-cover" src="${blog.video_embed_link}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+  
+  `: blog.banner ? `
+  <img src="${blog.banner}" alt="" class="w-full h-full absolute inset-0 object-cover">
+  
+  `:``}
+</div>`:``}
+
+<div class="md:p-6 p-4">
+
+    <h1 class="lg:text-2xl text-xl font-semibold mb-6"> ${blog.title} </h1>
+    <div class="flex flex-wrap font-small gap-2">
+                                  ${cats}
+    </div>
+    <div style="padding:5px;" class="flex items-center space-x-3 my-3 pb-4 border-t border-b border-l border-r">
+        <img src="${ blog.profile_pic != "" ? `${blog.profile_pic}`: `{% static 'course/assets/images/avatars/placeholder.png' %}`}" alt="" class="w-10 rounded-full">
+        <div>
+            <div class="text-base font-semibold"> ${blog.creator_username} </div>
+            <div class="text-xs"> ${blog.time_since} </div>
+        </div>
+    </div>
+
+    <div id="contentText_${blog.id}" style="padding:8px; overflow:hidden; height:70px;" class="space-y-3 contentTextGradient">
+      ${blog.content}
+    </div><br>
+    <div style="text-align:center;">
+      <button class="bg-gray-100 border hover:bg-gray-200 px-4 py-1.5 rounded-full text-sm" id="btnSeeMore_${blog.id}" onclick="seeMore(${blog.id})">Detayı Göster</button>
+      <button style="display:none;" class="bg-gray-100 border hover:bg-gray-200 px-4 py-1.5 rounded-full text-sm" id="btnCloseSeeMore_${blog.id}" onclick="closeSeeMore(${blog.id})">Gizle</button>
+    </div><br>
+
+
+    <div class="relative">
+      <div style="background-color:#f6f6f6;  border-radius: 10px;" class="p-6">
+                     
+                     <h5 style="cursor: pointer;" class="block text-m font-semibold mb-6"> <b id="show_comments_${blog.id}" onclick="getComments(${blog.id})" style="max-width:170px; border-radius: 10px; padding:8px; border: 1px solid #2f2f2f;">Yorumları Göster (<b id="comment_count_show_${blog.id}">${blog.blog_comments}</b>)</b><b id="hide_comments_${blog.id}" onclick="hideComments(${blog.id})" style="display:none; max-width:157px; border-radius: 10px; padding:8px; border: 1px solid #2f2f2f;">Yorumları Gizle (<b id="comment_count_hide_${blog.id}"></b>)</b>&nbsp;  <button id="modalButtonComment_${blog.id}" type="button" class="bg-gray-700 border hover:text-black hover:bg-gray-300 px-4 py-1.5 rounded-full text-sm text-white" uk-toggle="target: #send_comment" onclick="setBlogID(${blog.id},null)" ><ion-icon name="chatbubble-ellipses-outline"></ion-icon></button> 
+                      <button id="likePost_${blog.id}" onclick="likePost(${blog.id})" type="button" class="bg-gray-200 border hover:text-white hover:bg-gray-700 px-4 py-1.5 rounded-full text-sm text-gray" onclick="setBlogID(${blog.id},null)" ><ion-icon name="${ like ? `heart-dislike`:`heart` }"></ion-icon>&nbsp;${blog.like_count}</button></h5>
+                     <div id="comment_area_${blog.id}" class="space-y-5">
+                     </div>
+      </div>
+    </div>
+</div>
+</div><br>
+                `;
+    
+                postsContainer.append(postHtml);
+              });
+              if (url == null){
+                loadMore.textContent = "Gösterilecek daha fazla konu yok";
+                document.getElementById("loadingEfect").style.display = "none";
+                    }else{
+                      loadMore.disabled = false;
+    
+                    }
+    
+              }else{
+                loadMore.textContent = "Gösterilecek daha fazla konu yok";
+                document.getElementById("loadingEfect").style.display = "none";
+              }
+                document.getElementById("loadingEfect").style.display = "none";
+              }
+
+      function setBlogID(blog_id,comment_id=null){
+          document.getElementById("message").value = "";
+          form_blog_id = blog_id;
+          form_comment_id = comment_id;
+        }
+
+
+
+    function appendComments(help_id,response,comment_id=null){
+  if (comment_id){
+  var get_comment_area = document.getElementById("comment_area_"+help_id+"_"+comment_id);
+    document.getElementById("hide_comments_"+help_id+"_"+comment_id).style.display = 'inline';
+  document.getElementById("show_comments_"+help_id+"_"+comment_id).style.display = 'none';
+  }else{
+  var get_comment_area = document.getElementById("comment_area_"+help_id);
+    document.getElementById("hide_comments_"+help_id).style.display = 'inline';
+  document.getElementById("show_comments_"+help_id).style.display = 'none';
+  }
+
+  var comments = ""
+  var comments_count = response.results.length;
+  response.results.forEach(function (comment) {
+  comments += `
+              <div class="flex gap-x-4 relative" >
+                  <img src="${ comment.profile_pic != "" ? `${comment.profile_pic}`: `{% static 'course/assets/images/avatars/placeholder.png' %}`}" alt="" class="rounded-full shadow w-12 h-12">
+                  ${comment_id == null ? `<button id="modalButtonComment_${help_id}_${comment.id}" type="button" class="bg-gray-700 border hover:text-black hover:bg-gray-300 px-4 py-1.5 rounded-full text-sm text-white absolute right-0 top-0" uk-toggle="target: #send_comment" onclick="setBlogID(${help_id},${comment.id})" ><ion-icon name="chatbubble-ellipses-outline"></ion-icon></button>`:``}
+                  
+                  <div >
+                      <h4 class="text-base m-0 font-semibold">${comment.creator_fullname}</h4>
+                      <span class="text-gray-700 text-sm">${comment.time_since}</span>
+
+                      <p class="mt-3 md:ml-0 -ml-16">
+                        ${comment.comment}
+                      </p>
+                      
+                      <div class="p-0" style="padding-top:10px;">
+                     
+                        ${comment_id == null ? `<h5 style="cursor: pointer;" class="block text-sm font-semibold mb-6"> <b id="show_comments_${help_id}_${comment.id}" onclick="getComments(${help_id},${comment.id})" style="max-width: 145px; border-radius: 10px; padding:7px; border: 1px solid #2f2f2f; display:inline;">Yanıtları Göster (<b id="comment_count_show_${help_id}_${comment.id}">${comment.sub_comments}</b>)</b>
+                          <b id="hide_comments_${help_id}_${comment.id}" onclick="hideComments(${help_id},${comment.id})"cursor: pointer; style="max-width: 132px; border-radius: 10px; padding:7px; border: 1px solid #2f2f2f; display:none;">Yanıtları Gizle (<b id="comment_count_hide_${help_id}_${comment.id}">${comment.sub_comments}</b>)</b></h5>
+                     <div id="comment_area_${help_id}_${comment.id}" class="space-y-5"></div>`:``}
+                    </div>
+                  </div>
+                
+              </div>
+              `;
+              comments_count += comment.sub_comments;
+          });
+  if (comment_id == null){
+    get_b_tag = document.getElementById("comment_count_show_"+help_id)
+    get_b_tag2 = document.getElementById("comment_count_hide_"+help_id)
+
+
+    if (get_b_tag){
+      get_b_tag.textContent = comments_count;
+    }
+    if(get_b_tag2){
+      get_b_tag2.textContent = comments_count;
+
+    }
+
+  }else{
+    var get_b_tag = document.getElementById("comment_count_show_"+help_id+"_"+comment_id);
+    var get_b_tag2 = document.getElementById("comment_count_hide_"+help_id+"_"+comment_id);
+
+    if (get_b_tag){
+      get_b_tag.textContent = comments_count;
+    } 
+    if(get_b_tag2){
+      get_b_tag2.textContent = comments_count;
+
+    }
+
+
+  }
+  get_comment_area.innerHTML = comments;
+}
+function appendComments(help_id,response,comment_id=null){
+  if (comment_id){
+  var get_comment_area = document.getElementById("comment_area_"+help_id+"_"+comment_id);
+    document.getElementById("hide_comments_"+help_id+"_"+comment_id).style.display = 'inline';
+  document.getElementById("show_comments_"+help_id+"_"+comment_id).style.display = 'none';
+  }else{
+  var get_comment_area = document.getElementById("comment_area_"+help_id);
+    document.getElementById("hide_comments_"+help_id).style.display = 'inline';
+  document.getElementById("show_comments_"+help_id).style.display = 'none';
+  }
+
+  var comments = ""
+  var comments_count = response.results.length;
+  response.results.forEach(function (comment) {
+  comments += `
+              <div class="flex gap-x-4 relative" >
+                  <img src="${ comment.profile_pic != "" ? `${comment.profile_pic}`: `{% static 'course/assets/images/avatars/placeholder.png' %}`}" alt="" class="rounded-full shadow w-12 h-12">
+                  ${comment_id == null ? `<button id="modalButtonComment_${help_id}_${comment.id}" type="button" class="bg-gray-700 border hover:text-black hover:bg-gray-300 px-4 py-1.5 rounded-full text-sm text-white absolute right-0 top-0" uk-toggle="target: #send_comment" onclick="setBlogID(${help_id},${comment.id})" ><ion-icon name="chatbubble-ellipses-outline"></ion-icon></button>`:``}
+                  
+                  <div >
+                      <h4 class="text-base m-0 font-semibold">${comment.creator_fullname}</h4>
+                      <span class="text-gray-700 text-sm">${comment.time_since}</span>
+
+                      <p class="mt-3 md:ml-0 -ml-16">
+                        ${comment.comment}
+                      </p>
+                      
+                      <div class="p-0" style="padding-top:10px;">
+                     
+                        ${comment_id == null ? `<h5 style="cursor: pointer;" class="block text-sm mb-6"> <b id="show_comments_${help_id}_${comment.id}" onclick="getComments(${help_id},${comment.id})" style="max-width: 145px; border-radius: 10px; padding:7px; border: 1px solid #2f2f2f; display:inline;">Yanıtları Göster (<b id="comment_count_show_${help_id}_${comment.id}">${comment.sub_comments}</b>)</b>
+                          <b id="hide_comments_${help_id}_${comment.id}" onclick="hideComments(${help_id},${comment.id})"cursor: pointer; style="max-width: 132px; border-radius: 10px; padding:7px; border: 1px solid #2f2f2f; display:none;">Yanıtları Gizle (<b id="comment_count_hide_${help_id}_${comment.id}">${comment.sub_comments}</b>)</b></h5>
+                     <div id="comment_area_${help_id}_${comment.id}" class="space-y-5"></div>`:``}
+                    </div>
+                  </div>
+                
+              </div>
+              `;
+              comments_count += comment.sub_comments;
+          });
+  if (comment_id == null){
+    get_b_tag = document.getElementById("comment_count_show_"+help_id)
+    get_b_tag2 = document.getElementById("comment_count_hide_"+help_id)
+
+
+    if (get_b_tag){
+      get_b_tag.textContent = comments_count;
+    }
+    if(get_b_tag2){
+      get_b_tag2.textContent = comments_count;
+
+    }
+
+  }else{
+    var get_b_tag = document.getElementById("comment_count_show_"+help_id+"_"+comment_id);
+    var get_b_tag2 = document.getElementById("comment_count_hide_"+help_id+"_"+comment_id);
+
+    if (get_b_tag){
+      get_b_tag.textContent = comments_count;
+    } 
+    if(get_b_tag2){
+      get_b_tag2.textContent = comments_count;
+
+    }
+
+
+  }
+  get_comment_area.innerHTML = comments;
+}
+
+function hideComments(help_id,comment_id=null){
+  if (comment_id){
+    document.getElementById("comment_area_"+help_id+"_"+comment_id).innerHTML = "";
+    document.getElementById("hide_comments_"+help_id+"_"+comment_id).style.display = 'none';
+    document.getElementById("show_comments_"+help_id+"_"+comment_id).style.display = 'inline';
+
+  }else{
+    document.getElementById("comment_area_"+help_id).innerHTML = "";
+    document.getElementById("hide_comments_"+help_id).style.display = 'none';
+    document.getElementById("show_comments_"+help_id).style.display = 'inline';
+
+  }
+
+}
+
+            function getComments(blog_id,comment_id=null){
+
+              if (comment_id){
+                document.getElementById("hide_comments_"+blog_id+"_"+comment_id).style.backgroundColor = '#374151';
+                document.getElementById("hide_comments_"+blog_id+"_"+comment_id).style.color = '#f8f8f8';
+              }else{
+                document.getElementById("hide_comments_"+blog_id).style.backgroundColor = '#374151';
+                document.getElementById("hide_comments_"+blog_id).style.color = '#f8f8f8';
+              }
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/blog-comments/',
+                    data: {blog_id:blog_id,comment_id:comment_id},
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (response) {
+                      appendComments(blog_id,response,comment_id);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('İstek sırasında bir hata oluştu:', error);
+                    }
+                });
+
+}
+
+</script>
+<script>
+  $(document).ready(function () {
+
+
+    $('#commentForm').submit(function (e) {
+        e.preventDefault();
+
+        var formData = {
+            blog: form_blog_id,
+            parent: form_comment_id,
+            comment: $('#message').val(),
+
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/api/blog-comments/',
+            data: JSON.stringify(formData),
+            contentType: 'application/json',
+            headers:{
+            'X-CSRFToken': "{{ csrf_token }}",
+            },
+            success: function (response) {
+                if (response.status == 'ok'){
+                  if (form_comment_id){
+                    var modalButton = document.getElementById("modalButtonComment_"+form_blog_id+"_"+form_comment_id);
+                  }else{
+                    var modalButton = document.getElementById("modalButtonComment_"+form_blog_id);
+                  }
+                  modalButton.click();
+                  UIkit.notification('<ion-icon name="checkmark-outline"></ion-icon><span style="color:#1fc08a;">Yorumunuz başarıyla iletildi.</span>');
+                  getComments(form_blog_id,form_comment_id);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('İstek sırasında bir hata oluştu:', error);
+            }
+        });
+    });
+
+    $('#createForm').submit(function (e) {
+        e.preventDefault();
+        document.getElementById("content_input").value = quill.root.innerHTML;
+        var formData = new FormData(this);
+        //var quillData = quill.root.innerHTML; 
+        //formData.append('content', quillData);
+        $.ajax({
+            type: 'POST',
+            url: '/api/blog/',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            headers:{
+            'X-CSRFToken': "{{ csrf_token }}",
+            },
+            success: function (response) {
+                if (response.status == 'ok'){
+                  var closeModalButton = document.getElementById("closeModalButton");
+                  closeModalButton.click();
+                  UIkit.notification('<ion-icon name="checkmark-outline"></ion-icon><span style="color:#1fc08a;">Post başarıyla paylaşıldı.</span>');
+                  url = "/api/blog/?page=1";
+                  loadMore.disabled = true;
+                  var postsContainer = $("#searchResults");
+                  postsContainer.empty();
+                  getArticles();
+                }else if(response.status == "error"){
+                  UIkit.notification(`<ion-icon name="checkmark-outline"></ion-icon><span style="color:#1fc08a;">${response.message}</span>`);
+                }
+            },
+            error: function (xhr, status, error) {
+              UIkit.notification('<ion-icon name="checkmark-outline"></ion-icon><span style="color:#1fc08a;">Bilinmeyen bir hata oluştu.</span>');
+
+            }
+        });
+    });
+});
+</script>
+
+<script>    
+
+  function seeMore(blog_id){
+    var myParagraph = document.getElementById('contentText_'+blog_id);
+    var myBtn = document.getElementById('btnSeeMore_'+blog_id).style.display="none";
+    var myBtn = document.getElementById('btnCloseSeeMore_'+blog_id).style.display="inline";
+
+    myParagraph.style.overflow = "none"; 
+    myParagraph.style.height = "auto"; 
+    myParagraph.classList.remove("contentTextGradient");
+  }
+  function closeSeeMore(blog_id){
+    var myParagraph = document.getElementById('contentText_'+blog_id);
+    var myBtn = document.getElementById('btnSeeMore_'+blog_id).style.display="inline";
+    var myBtn = document.getElementById('btnCloseSeeMore_'+blog_id).style.display="none";
+
+    myParagraph.style.overflow = "hidden"; 
+    myParagraph.style.height = "100px"; 
+    myParagraph.classList.add("contentTextGradient");
+
+  }
+
+  function likePost(post_id){
+    console.log('like blog : ',post_id);
+
+    $.ajax({
+            type: 'GET',
+            url: '/api/blog-like/',
+            data: {post_id:post_id},
+            contentType: 'application/json',
+            headers:{
+            'X-CSRFToken': "{{ csrf_token }}",
+            },
+            success: function (response) {
+                if (response.status == 'like'){
+                  document.getElementById("likePost_"+post_id).innerHTML = '<ion-icon name="heart-dislike"></ion-icon>&nbsp;' + response.new_count;
+                }else if (response.status == 'un-like'){
+                  document.getElementById("likePost_"+post_id).innerHTML = '<ion-icon name="heart"></ion-icon>&nbsp;' + response.new_count;
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('İstek sırasında bir hata oluştu:', error);
+            }
+        });
+
+  }
+</script>
+
+{% endblock content %}
+
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+
+
+  const toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
+  ['link', 'image', 'video', 'formula'],
+
+  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+  [{ 'direction': 'rtl' }],                         // text direction
+
+  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean']                                         // remove formatting button
+];
+
+const quill = new Quill('#content', {
+  modules: {
+    toolbar: toolbarOptions
+  },
+  theme: 'snow'
+});
+
+</script>
+
+{% endblock %}

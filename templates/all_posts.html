@@ -1,0 +1,205 @@
+{% extends "layout_without_footer.html" %}
+{% load static %}
+{% load i18n %}
+{% load infinite_scroll %}
+{% block body %}
+<meta property="og:title" content="Yapay Arşiv Gönderileri!"/>
+<meta property="og:description" content="Türkiye'nin Yapay Zeka Arşivi; Binlerce Yapay Zeka Aracı İçin Tek Platform!"/>
+<meta property="og:image" content="https://yapayarsiv.com/media/profile_pic/yapayarsivlogo.png">
+<style>
+  #moving-element, #moving-element-sec {
+      position: relative;
+      top: 0;
+      transition: top 0.3s; 
+  }
+  #moving-element, #moving-element-sec {
+      position: relative;
+      top: 0;
+      transition: top 0.3s; 
+  }
+  .card {
+    transition: transform 0.3s;
+  }
+  .card:hover {
+    transform: scale(1.04);
+  }
+</style>
+
+<style>
+
+.fixed-image-posts {
+  object-fit: cover;
+  object-position: center;
+  text-align: center;
+  height: 33.333333333vh; 
+  width : 33.333333333vw;
+  border: none; 
+}
+@media screen and (max-width: 768px) {
+    .fixed-image-posts {
+    object-fit: cover;
+    object-position: center;
+    text-align: center;
+    height: 30.333333333vw; 
+    width : 33.333333333vw;
+    border: none; 
+  }
+}
+
+.image-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-container img {
+      border: 0; /* Resmin border özelliğini sıfıra ayarla */
+    }
+
+    .image-text {
+      text-align: -webkit-center;
+      position: absolute;
+      border-radius: 50%;
+      height: 36px;
+      width: 36px;
+      top: 0;
+      left: 0px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 6px;
+    }
+
+</style>
+<style>
+  .form-control:focus {
+      border-color: #2a2a2a; 
+      border-width: 3px;
+      box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
+  }
+</style>
+<h3 style="font-size:35px; margin-top:-25px;" >Gönderiler</h3>
+<p style="font-family: 'Figtree', sans-serif; margin-top: 10px; color:red;">*Video Başlığında Yazan Video Numarasını Aratarak Linke Ulaşabilirsin!</p>
+<form  method="post">
+  {% csrf_token %}
+  <div class="row">
+
+    <div class="col-md-3"></div>
+    <div class="col-md-6  input-group-lg">
+
+                <div class="input-group-prepend">
+                </div>
+       <input style="border-radius: 32px; text-align: center; margin-top: -10px;" placeholder="Numara Ara" {% if keyword %}value="{{ keyword }}"{% endif %} name="keyword" maxlength="64" type="text" class="form-control">
+       <div class="input-group-append" style="margin-top:25px;">
+      </div>
+     </div>
+<div style="text-align: center; margin-top: -20px;"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1778377270182761"
+     crossorigin="anonymous"></script>
+<!-- yatay reklam -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:180px"
+     data-ad-client="ca-pub-1778377270182761"
+     data-ad-slot="6782077299"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+
+</div>
+</form>
+<div class="container-fluid" style="padding-bottom: 25px;">
+
+  <div class="row">
+  <div class="col-md-1"></div>
+
+  <div class="col-md-10">
+
+  <div class="row" id="posts-container">
+        {% for post in feed %}
+      
+          <div class="col-4 image-container" title="{{ post.title }}" style="background-image: url('{{ post.thumbnail.url }}'); border:2px solid #ffffff; background-position-x: center; background-position-y: center; background-size: 100% 100%;">
+            <a target="_blank" href="{{ post.url }}">
+              <div class="fixed-image-posts" ></div>
+              <div class="image-text text-small" style="color: white;">{{ post.no }}</div>
+            </a>
+          </div>
+        
+        {% endfor %}
+ 
+</div>
+<div class="col-md-1"></div>
+
+</div>
+</div>
+</div>
+{% if load_more %}
+<div style="padding-bottom: 25px;">
+  <button class="btn btn-dark"  id="loadMoreButton">Daha fazla</button>
+</div>
+
+<script>
+  
+  $(document).ready(function(){
+      var page = 1;
+      var loadMore = document.getElementById("loadMoreButton");
+      $("#loadMoreButton").click(function(){
+        loadMore.disabled = true;
+        loadMore.textContent = "Yükleniyor...";
+          var dataToSend = {
+              page: page,
+              csrfmiddlewaretoken:'{{ csrf_token }}',
+              keyword:{% if keyword is None %}null{% else %}"{{keyword}}"{% endif %},
+          };
+        
+          $.ajax({
+              type: "POST",
+              url: "{% url 'forum:post-ajax-loadmore' %}",  
+              data: dataToSend,
+              success: function(response){
+
+                if (response.status == 1){
+
+
+                  page = response.page;
+                  appendPosts(response.data);
+
+                  if (response.data.length > 0 && response.data.length == response.listing_value ){
+                    loadMore.disabled = false;
+                    loadMore.textContent = "Daha fazla";
+                  }else{
+                    loadMore.textContent = "Gösterilecek daha fazla gönderi yok";
+                  }
+                }else{
+                  loadMore.textContent = "Hata";
+                }
+              },
+              error: function(error){
+                loadMore.textContent = "Hata";
+              }
+          });
+      });
+
+      function appendPosts(posts) {
+      var postsContainer = $("#posts-container");
+
+      posts.forEach(function (post) {
+        var postHtml = `
+        <div class="col-4 image-container" title="{{ post.title }}" style="background-image: url('${post.image_url}'); border:2px solid #ffffff; background-position-x: center; background-position-y: center; background-size: 100% 100%;">
+            <a target="_blank" href="${post.url}">
+              <div class="fixed-image-posts" ></div>
+              <div class="image-text text-small" style="color: white;">${post.no}</div>
+            </a>
+          </div>
+        `;
+
+        postsContainer.append(postHtml);
+      });
+    }
+
+
+  });
+
+
+
+</script>
+{% endif %}
+{% endblock body %}
+
+
+

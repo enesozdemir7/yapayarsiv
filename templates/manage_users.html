@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3>Kullanıcı Yönetimi</h3><br>
+<h6>{{request.user.email}} ile değişiklik yapmaktasınız</h6>
+<hr><br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+
+    <div class="col-md-4">
+      <form>
+        {% csrf_token %}
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Ara.." name="keyword" maxlength="64">
+          <button class="btn btn-outline-warning" type="submit"><i class="fas fa-search" ></i></button>
+        </div>
+    </form>
+    </div>
+
+    <div class="col-md-4"></div>
+  </div>
+</div>
+
+<br><br>
+{% if users %}
+<h5>Son eklenen 10 adet haber listelenmektedir</h5>
+<table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th scope="col">User ID</th>
+        <th scope="col">E-Posta</th>
+        <th scope="col">İsim-Soyisim</th>
+        <th scope="col">Meslek</th>
+        <th scope="col">Şehir</th>
+        <th scope="col">Onaylı</th>
+        <th scope="col">Editör</th>
+        <th scope="col">Son Giriş</th>
+        <th scope="col">Katılma</th>
+        <th scope="col">Bloklu</th>
+        <th scope="col">SuperUser Yetkisi</th>
+        <th scope="col">SuperUser</th>
+        <th scope="col">Güncelle</th>
+        <th scope="col">Blokla</th>
+      </tr>
+    </thead>
+    <tbody>
+
+        {% for user in users %}
+
+        <tr>
+            <th scope="row">{{user.user_id}}</th>
+            <td>{{user.email}}</td>
+            <td>{{user.name}} {{user.surname}}</td>
+            <td>{{user.job}}</td>
+            <td>{{user.city}}</td>
+            <td>{{user.verified}}</td>
+            <td>{{user.editor}}</td>
+            <td>{{user.last_login}}</td>
+            <td>{{user.date_joined}}</td>
+            <td>{{user.blocked}}</td>
+            <td>{{user.is_staff}}</td>
+            <td>{{user.is_active}}</td>
+            <td><a type="button" href="{% url 'user:update_user' id=user.user_id %}" class="btn btn-outline-warning">Güncelle</a></td>
+            <td><a type="button" href="{% url 'user:block_user' id=user.user_id %}" class="btn btn-outline-danger">Blokla</a></td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+  </table>
+
+{% else %}
+<div class="alert alert-danger">
+    Kayıtlı kullanıcı bulunamadı..
+</div>
+{% endif %}
+
+<br><br><br><br>
+<br><br><br><br>
+{% endblock body %}

@@ -1,0 +1,11 @@
+
+{% load i18n %}
+
+{{ ress.reason }} {% if ress.reason %} <a href="javascript:history.go(-1)">{% trans 'Geri dön' %}</a>
+
+{% else %}
+<!-- Ödeme formunun açılması için gereken HTML kodlar / Başlangıç -->
+<script src="https://www.paytr.com/js/iframeResizer.min.js"></script>
+<iframe src="https://www.paytr.com/odeme/guvenli/{{ ress.token }}" id="paytriframe" frameborder="0" scrolling="no" style="width: 100%;"></iframe>
+<script>iFrameResize({},'#paytriframe');</script>
+{% endif %}

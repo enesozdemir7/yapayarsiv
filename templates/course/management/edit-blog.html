@@ -1,0 +1,160 @@
+{% extends 'course/management/base.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.snow.css" rel="stylesheet" />
+
+<div class="container">
+
+    <div class="lg:w-11/12 mx-auto">
+
+        <div class="flex items-center mb-10">
+            <a href="#" onclick="goBack()" class="-ml-2 inline-flex p-1.5 text-xl">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+            <h3 onclick="goBack()" style="cursor: pointer;" class="font-semibold md:text-xl text-lg">  Blog Listesi</h3>
+        </div>
+
+        <div class="bg-white rounded-md shadow">
+
+            <h3 class="px-8 pt-5 mb-2 text-lg font-semibold">  {{ title }}</h3>
+            
+            <div class="z-20 bg-white overflow-hidden border-b" >
+                <nav class="cd-secondary-nav extanded px-6">
+                    <ul class="space-x-3" uk-switcher="connect: #form_tabs; animation: uk-animation-fade">
+                        <li><a href="#"> <ion-icon name="document-text-outline" class="pr-2 text-2xl lg:block hidden"></ion-icon>Blog Detayları </a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <form class="uk-switcher" method="POST" enctype="multipart/form-data" id="form_tabs">
+                <!-- Basic  -->
+                <div class="p-8">
+                    <div >
+                        {% csrf_token %}
+
+                        <label for="cats" class="font-medium self-center">Kategori <span class="text-red-600">*</span> </label>
+                        <select required class="selectpicker border rounded-md col-span-2" name="cats" id="cats" multiple>
+                            
+                            <optgroup label="Kategoriler">
+                                {% for c in get_cats %}
+                                <option {% if c in  get_blog.category.all %}selected{% endif %} value="{{ c.id }}">{{ c.name }}</option> 
+                                {% endfor %}
+
+                            </optgroup>
+                            <optgroup label="AI Araç Kategorileri">
+                                {% for c in get_ai_cats %}
+                                <option {% if c in  get_blog.category.all %}selected{% endif %} value="{{ c.id }}">{{ c.name }}</option> 
+                                {% endfor %}
+                            </optgroup> 
+                        </select>
+
+                        <label for="title" class="font-medium"> Başlık <span class="text-red-600">*</span></label>
+                        <div class="col-span-2">
+                            <input type="text" id="title" name="title" value="{{ get_blog.title }}" class="shadow-none with-border" placeholder="Blog başlığı" required="">
+                        </div>
+                        <label for="content" class="font-medium"> İçerik <span class="text-red-600">*</span></label>
+                        <div id="content">
+                            {{ get_blog.content|safe }}
+                        </div>
+                        <input type="text" name="content" id="content_input" hidden>
+
+                        <label for="video_embed_link" class="font-medium"> Video Embed Link <span class="text-red-600">*</span></label>
+                        <div class="col-span-2">
+                            <input type="text" id="video_embed_link" name="video_embed_link" value="{{ get_blog.video_embed_link }}" class="shadow-none with-border" placeholder="Vimeo Embed Link">
+                        </div>
+                        <label for="course_basic" class="font-medium self-center">Kapak Fotoğrafı <span class="text-red-600">*</span> </label>
+                        <div class="col-span-2">
+                            <aks-file-upload></aks-file-upload> 
+                            {% if get_blog.banner %} 
+                            <h3>Mevcut Kapak Fotoğrafı:</h3>
+                            <div data-file="{{ get_blog.banner.name }}" data-file-type="png" class="aks-file-upload-preview " style="height: 240px;"><header class="aks-file-upload-p-header"><div class="aks-file-upload-p-header-icon"><svg width="22" height="22" viewBox="0 0 101 121" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="aksimageicona" x1=".5" x2=".5" y2="1"><stop stop-color="#36D2AD" offset="0"></stop><stop stop-color="#2DBC9A" offset="1"></stop></linearGradient><filter id="aksimageiconb" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix><feOffset dx="0" dy="-2"></feOffset><feGaussianBlur stdDeviation="1"></feGaussianBlur><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.09019608 0"></feColorMatrix><feBlend in2="BackgroundImageFix" result="effect0_dropShadow"></feBlend><feBlend in="SourceGraphic" in2="effect0_dropShadow" result="shape"></feBlend></filter></defs><g transform="translate(.5 .5)"><g fill-rule="evenodd"><path d="m60 0 40 40v66c0 7.732-6.268 14-14 14h-72c-7.732 0-14-6.268-14-14v-92c0-7.732 6.268-14 14-14h46z" fill="url(#aksimageicona)" fill-opacity=".8"></path><path transform="matrix(-1 0 0 -1 100 40)" d="M0 0L25.2929 0C33.0249 0 40 6.97512 40 14.7071L40 40L0 0Z" fill="#fff" fill-opacity=".4" filter="url(#aksimageiconb)"></path></g><g transform="translate(20 50)"><path d="m42.224 0h-40.002c-1.2274 0-2.2223 0.99512-2.2223 2.2227v35.556c0 1.2269 0.9949 2.2209 2.2223 2.2209h40.002c1.2274 0 2.2223-0.994 2.2223-2.2209v-35.556c0-1.2276-0.995-2.2227-2.2223-2.2227zm-4.4449 33.334h-31.112v-11.111l6.6669-6.6674 11.112 11.112 6.6667-6.6678 6.667 6.6678v6.6663zm-4.4447-17.778c-2.4547 0-4.4444-1.9895-4.4444-4.4442 0-2.4556 1.9897-4.4445 4.4444-4.4445s4.4447 1.9889 4.4447 4.4445c0 2.4547-1.9899 4.4442-4.4447 4.4442z" fill="#fff"></path></g></g></svg></div><div class="aks-file-upload-p-header-content"><span class="aks-file-upload-title">{{ get_blog.banner.name }}</span><span class="aks-file-upload-size">198 KB</span></div><div class="aks-file-upload-delete" data-delete="{{ get_blog.banner.name }}"><svg width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg"><path d="M11.586 13l-2.293 2.293a1 1 0 0 0 1.414 1.414L13 14.414l2.293 2.293a1 1 0 0 0 1.414-1.414L14.414 13l2.293-2.293a1 1 0 0 0-1.414-1.414L13 11.586l-2.293-2.293a1 1 0 0 0-1.414 1.414L11.586 13z" fill="currentColor" fill-rule="nonzero"></path></svg></div></header><main class="aks-file-upload-p-main"><div class="aks-file-upload-image"><img src="{{ get_blog.banner.url }}" alt="{{ get_blog.banner.name }}" data-file="{{ get_blog.banner.name }}" class="png" style="height: 240px;"></div></main></div>
+                            {% endif %}
+                        </div>
+
+
+                        <div class="text-center" style="padding: 10px;">
+                            <button type="button" onclick="submitForm()" name="createBlog" class="button">Kaydet</button>
+                       </div>
+                          
+                    </div>
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'course/assets/js/aksfileupload.js' %}"></script>
+<script>
+    $(function () {
+        $("aks-file-upload").aksFileUpload({
+            fileUpload: "#uploadfile",
+            dragDrop: true,
+            maxSize: "1 MB",
+            multiple: false,
+            maxFile: 1
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.js"></script>
+
+<script>
+
+
+    const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['blockquote', 'code-block'],
+    ['link', 'image', 'video', 'formula'],
+  
+    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+    [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+    [{ 'direction': 'rtl' }],                         // text direction
+  
+    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+  
+    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+    [{ 'font': [] }],
+    [{ 'align': [] }],
+  
+    ['clean']                                         // remove formatting button
+  ];
+  
+  const quill = new Quill('#content', {
+    modules: {
+      toolbar: toolbarOptions
+    },
+    theme: 'snow'
+  });
+  
+  </script>
+<script>
+    function submitForm(){
+        var get_form = document.getElementById("form_tabs");
+        document.getElementById("content_input").value = quill.root.innerHTML;
+        console.log('tıklandı.')
+        get_form.submit();
+    }
+    </script>
+<script>
+    function goBack() {
+      window.history.back();
+    }
+</script>
+
+
+
+
+{% endblock %}

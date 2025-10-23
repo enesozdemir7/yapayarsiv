@@ -1,0 +1,87 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'logo/yapay_arsiv_whitetext_logo.svg' %}" alt="Logo" width="150" height="35">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample07">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'forum:all_posts' %}">Gönderiler</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'forum:all_news' %}">Haberler</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'forum:forum' %}">Forum</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'forum:contact' %}">İş Birliği & İletişim</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav">
+        {% if request.user.is_staff %}
+        
+
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                  Admin Menü
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                  <li><a class="dropdown-item" href="{% url 'user:dashboard' %}">Admin Panel</a></li>
+                  <li><a class="dropdown-item" href="{% url 'forum:manage_news' %}">Haberleri Yönet</a></li>
+                  <li><a class="dropdown-item" href="{% url 'tools:manage_tools' %}">Araçları Yönet</a></li>
+                  <li><a class="dropdown-item" href="{% url 'forum:manage_posts' %}">Gönderileri Yönet</a></li>
+                  <li><a class="dropdown-item" href="{% url 'tools:manage_ads' %}">Sponsorluklar</a></li>
+                  <li><a class="dropdown-item" href="{% url 'user:manage_users' %}">Kullanıcılar</a></li>
+                </ul>
+              </li>
+
+        {% else %}
+
+        {% endif %}
+
+        {% if request.user.is_authenticated %}
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                  Kontrol Paneli
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                  <li><a class="dropdown-item" href="{% url 'user:profile' %}">Profil</a></li>
+                  <li><a class="dropdown-item" href="{% url 'user:favorites' %}">Favoriler</a></li>
+                  <li><a class="dropdown-item" href="{% url 'user:logout' %}">Çıkış Yap</a></li>
+                </ul>
+              </li>
+
+        {% else %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user:login' %}">Giriş Yap</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user:register' %}">Kayıt Ol</a>
+          </li>
+
+        {% endif %}
+
+      </div>
+    </div>
+  </nav>
+
+
+
+
+{% if messages %}
+
+      {% for message in messages %}
+        <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+      {% endfor %}
+
+{% endif %}

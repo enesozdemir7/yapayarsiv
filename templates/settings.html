@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+{% block body %}
+
+
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<section>
+    <div class="container py-5">
+
+
+      {% if profile.errors %}
+    <div class="alert alert-danger">
+      {{ profile.non_field_errors }}
+    </div>
+{% endif %}
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5>Profil fotoğrafı:</h5>
+                {{ profile.profile_pic }}<i class="fas fa-wrench" style="color: #7fd6ff;"></i>
+                <br><br>
+                <button type="submit" class="btn btn-outline-success">Ayarları Kaydet</button>
+                <a href="{% url 'user:profile' %}" type="submit" class="btn btn-outline-warning">İptal</a>
+            </div>
+          </div>
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush rounded-3">
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3 ">
+                  <i class="fas fa-globe fa-lg" ></i>
+                  {{ profile.website }}<i class="fas fa-wrench" style="color: #7fd6ff;"></i>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3 ">
+                  <i class="fab fa-github fa-lg" ></i>
+                  {{ profile.github }}<i class="fas fa-wrench" style="color: #7fd6ff;"></i>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3 ">
+                  <i class="fab fa-instagram fa-lg" ></i>
+                  {{ profile.instagram }}<i class="fas fa-wrench" style="color: #7fd6ff;"></i>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">İsim-Soyisim</p>
+                </div>
+                <div class="col-sm-9">
+                    {{ profile.name }} {{ profile.surname }} &ensp;<i class="fas fa-wrench" style="color: #7fd6ff;"></i>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">E-Posta</p>
+                </div>
+                <div class="col-sm-9">
+                    {{ profile.email }} &ensp;<i class="fas fa-wrench" style="color: #7fd6ff;"></i>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Kullanıcı Adı</p>
+                </div>
+                <div class="col-sm-9">
+                    {{ profile.username }} &ensp;<i class="fas fa-wrench" style="color: #7fd6ff;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card mb-4 mb-md-0">
+                <div class="card-body">
+                    <p class="mb-4">Son Gönderiler</p>
+                    <div class="text-start">
+                        {% if thread_found %}
+                            {% for thread in threads %}
+                            &emsp; <a class="text-start" href="#" style="font-size: small;">> {{ thread.category }} / {{ thread.subcategory }} / {{ thread.title }} </a><br>
+                            {% endfor %}
+                        {% else %}
+                            &emsp; <div class="text-center" style="font-size: medium;">Henüz gönderi oluşturulmamıştır</div>
+                        {% endif %}
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card mb-4 mb-md-0">
+                <div class="card-body">
+                    <p class="mb-4">Son Favori Atılanlar</p>
+                    <div class="text-start">
+                        {% if tool_favorited_found %}
+                            {% for fav in tool_favorited %}
+                            &emsp; <a class="text-start" href="#" style="font-size: small;">> {{ fav.category }} / {{ fav.subcategory }} / {{ fav.tool_name }} </a><br>
+                            {% endfor %}
+                        {% else %}
+                            &emsp; <div class="text-center" style="font-size: medium;">Henüz favori oluşturulmamıştır</div>
+                        {% endif %}
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+
+{% endblock body %}

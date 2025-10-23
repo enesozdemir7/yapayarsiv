@@ -1,0 +1,491 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head> 
+
+
+    <title>{{ title }} | Yapay Arşiv</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Courseplus is - Professional A unique and beautiful collection of UI elements">
+
+    <!-- Favicon -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="{{ get_general_settings.fav_icon }}" rel="icon" type="image/png">
+
+    <link rel="stylesheet" href="{% static 'course/assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'course/assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'course/assets/css/style.css' %}">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    {% block head %}
+    {% endblock %}
+    {% if request.user.is_authenticated %}
+
+
+
+    <script>
+
+        showing = false;
+        function sendRequest() {
+            $.ajax({
+            url: "/api/notifications", 
+            method: "GET", 
+            success: function(response) {
+                console.log(response);
+                appendNotifications(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX isteği başarısız oldu.');
+            }
+        });
+        }
+        function showNotifications() {
+            console.log("show status : ",showing);
+            if (showing){
+                $.ajax({
+                    url: "/api/notification-show", 
+                    method: "GET", 
+                    success: function(response) {
+                        console.log(response);
+                        if (response.status == "ok"){
+                            showing = false;
+                            var new_items = document.getElementById("new_items");
+                            new_items.textContent = "0";
+                            new_items.style.display = "none";
+
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX isteği başarısız oldu.');
+                    }
+                });
+            }
+
+        }
+        $(document).ready(function() {
+            sendRequest();
+        })
+    
+        setInterval(sendRequest, 60000); 
+
+
+        function appendNotifications(response) {
+              var postsContainer = $("#notificationBox");
+              var new_items = document.getElementById("new_items");
+
+              new_items.textContent = response.new_items;
+              if (response.new_items > 0){
+                if (showing == false){
+                    if (response.sound_status == "1") {
+                        playNotificationSound();
+                    }
+                    showing = true;
+                }
+                new_items.style.display = "flex";
+
+
+              }else{
+                showing = false;
+                new_items.style.display = "none";
+
+              }
+
+              postsContainer.empty();
+
+              if (Array.isArray(response.results) && response.results.length > 0){
+              response.results.forEach(function (n) {
+                var postHtml = `
+                <li>
+                    <a href="${n.link ?`${n.link}`:`#`}">
+                        <div class="drop_avatar">
+                        </div>
+                        <div class="drop_content">
+                            <p> <strong style="color:black;"><b>${n.sender}</b></strong> ${n.title}
+                            </p>
+                            <span class="time-ago"> ${n.time_since} </span>
+                        </div>
+                    </a>
+                </li>
+                `;
+    
+                postsContainer.append(postHtml);
+              });
+            }
+        }
+
+        function playNotificationSound() {
+            var audio = new Audio("{% static 'sound/notification.mp3' %}"); 
+            audio.play();
+        }
+
+    </script>
+{% endif %}
+<style>
+        .mobileDiv {
+        display: none;
+    }
+        @media only screen and (max-width: 600px) {
+        .mobileDiv {
+            display: block;
+        }
+    }
+</style>
+
+<style>
+h1 {
+  font-size: 1.75em;
+}
+
+h2 {
+  font-size: 1.35em;
+}
+
+h3 {
+  font-size: 1.05em; 
+}
+
+</style>
+</head>
+
+<body>
+
+    <div id="wrapper" class="is-verticle">
+
+        <!--  Header  -->
+        <header uk-sticky="" style="background-color:white; border-top: 0px solid #e5e7eb; border-bottom: 1px solid #e5e7eb ;"> 
+
+            <div class="header_inner">
+                <div class="left-side" style="background-color:white;">
+    
+                    <!-- Logo -->
+                    <div id="logo">
+                        <a href="{% url 'index' %}">
+                            <img src="{{ get_general_settings.logo }}" alt="">
+                            <img src="{{ get_general_settings.logo }}" class="logo_inverse" alt="">
+                            <img src="{{ get_general_settings.logo }}" class="logo_mobile" alt="">
+                        </a>
+                    </div>
+    
+                    <!-- icon menu for mobile -->
+                    <div class="triger" uk-toggle="target: #wrapper ; cls: is-active">
+                    </div>
+    
+                </div>
+                <div class="right-side" style="background-color:white ;">
+     
+                    <!-- Header search box  -->
+                    <div class="header_search"><i style="color: #585858;" class="uil-search-alt"></i> 
+                        <input id="search_input" type="text" class="form-control" placeholder="Site genelinde arama yap" style="border: 2px solid #585858;" autocomplete="off">
+                        <div id="search_results_bar" uk-drop="mode: click;offset:10" class="header_search_dropdown">
+                               
+                            <h4 class="search_title"> <span style="font-weight: bolder;" id="search_query_set"></span> <span id="search_result_text"></span></h4>
+                            <ul>
+                                <li style="display: none;" id="course_search_result"> 
+                                    <a id="course_search_link" href="#">  
+                                        <img src="{% static 'search_result_logo/video.png' %}" alt="" class="list-avatar">
+                                        <div class="list-name"><b id="course_find">5</b> Kurs bulundu -  Sonuçları Göster </div>
+                                    </a> 
+                                </li> 
+                                <li style="display: none;" id="blog_search_result"> 
+                                    <a id="blog_search_link" href="#">  
+                                        <img src="{% static 'search_result_logo/blog.png' %}" alt="" class="list-avatar">
+                                        <div class="list-name"><b id="blog_find">5</b> Hızlı öğren konusu bulundu - Sonuçları Göster </div>
+                                    </a> 
+                                </li>
+                                <li style="display: none;" id="help_search_result"> 
+                                    <a id="help_search_link" href="#">  
+                                        <img src="{% static 'search_result_logo/help.png' %}" alt="" class="list-avatar">
+                                        <div class="list-name"> <b id="help_find">5</b> Yardım konusu bulundu - Sonuçları Göster </div>
+                                    </a> 
+                                </li>
+                                <li style="display: none;" id="faq_search_result"> 
+                                    <a id="faq_search_link" href="#">  
+                                        <img src="{% static 'search_result_logo/faq.png' %}" alt="" class="list-avatar">
+                                        <div class="list-name"><b id="faq_find">5</b> Sıkça Sorulan Soru bulundu -  Sonuçları Göster </div>
+                                    </a> 
+                                </li>
+                            </ul>
+    
+                        </div>
+                    </div>
+
+                    <div>
+
+                        <a href="#" onclick="showNotifications()" class="header_widgets">
+                            <ion-icon name="notifications-outline" class="is-icon"></ion-icon>
+                            <span style="display: none;" id="new_items"> 0 </span>
+                        </a>
+                        <div uk-drop="mode: click" class="header_dropdown"> 
+                            <div class="drop_headline">
+                                <h4>Bildirimler </h4>
+                                <div class="btn_action">
+                                    <div class="btn_action">
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <ul id="notificationBox" class="dropdown_scrollbar" data-simplebar>
+                            </ul>
+                            <a href="{% url 'notifications' %}" class="see-all">Tümünü Göster</a>
+                        </div>
+        
+                         <!-- profile -->
+                        <a href="#">
+                            <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static 'course/assets/images/avatars/placeholder.png' %}{% endif %}" class="header_widgets_avatar" alt="">
+                        </a>
+                        <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
+                            <ul>   
+                                <li>
+                                    <a href="#" class="user">
+                                        <div class="user_avatar">
+                                            <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static 'course/assets/images/avatars/placeholder.png' %}{% endif %}" alt="">
+                                        </div>
+                                        <div class="user_name">
+                                            <div> {{ request.user.full_name }} </div>
+                                            <span> {{ request.user.username }} </span>
+                                        </div>
+                                    </a>
+                                </li>
+                                {% if request.user.is_superuser %}
+                                <li> 
+                                    <hr>
+                                </li>
+                                <li> 
+                                    <a href="{% url 'management:index' %}" class="is-link">
+                                        <ion-icon name="rocket-outline" class="icon-material-outline-star"></ion-icon> <span>  Yönetim Paneli   </span>
+                                    </a>
+                                </li> 
+                                <li> 
+                                    <hr>
+                                </li>
+                                {% endif %}
+                                <li> 
+                                    <a href="{% url 'user:blog' %}">
+                                        <ion-icon name="document-text-outline" class="is-icon"></ion-icon>
+                                         Paylaşımlarım 
+                                    </a>
+                                </li>
+                                <li> 
+                                    <a href="{% url 'user:help' %}">
+                                        <ion-icon name="reader-outline" class="is-icon"></ion-icon>
+                                         Yardım İsteklerim 
+                                    </a>
+                                </li>
+                                <li> 
+                                    <a href="{% url 'user:payments' %}">
+                                        <ion-icon name="card-outline" class="is-icon"></ion-icon>
+                                        Ödemelerim
+                                    </a>
+                                </li>
+                                <li> 
+                                    <hr>
+                                </li>
+                                <li> 
+                                    <a href="{% url 'logout' %}">
+                                        <ion-icon name="log-out-outline" class="is-icon"></ion-icon>
+                                        Çıkış Yap 
+                                    </a>
+                                </li>
+                            </ul>
+                        </div> 
+
+                    </div>
+    
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Contents -->
+        <div class="main_content">
+            {% if messages %}
+            <div class="container">
+            {% for message in messages %}
+            <div class="bg-blue-50 border-blue-300 border px-4 py-2 rounded text-blue-900 text-sm mb-6">
+                <ion-icon class="text-sm" name="information-circle-outline"></ion-icon>&nbsp;{{ message }}
+               </div>
+            {% endfor %}
+            </div>
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+            {% include 'course/footer.html' %}
+        </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar">
+            <div class="sidebar_inner" data-simplebar>
+                
+                <ul class="side-colored">
+                    <li {% if request.path == '/' %}class="active"{% endif %}><a href="{% url 'index' %}">
+                            <ion-icon name="home-outline" class="bg-gradient-to-br from-purple-300 p-1 rounded-md side-icon text-opacity-80 text-white to-blue-500">
+                            </ion-icon>
+                            <span>Ana Sayfa</span>
+                        </a>
+                    </li>
+                    <li {% if '/hizli-ogren/' in request.path %}class="active"{% endif %}><a  href="{% url 'blog:blog-list' %}">
+                        <ion-icon name="newspaper-outline" class="bg-gradient-to-br from-yellow-300 p-1 rounded-md side-icon text-opacity-80 text-white to-red-500">
+                        </ion-icon>
+                        <span>Hızlı Öğren</span>
+                        </a>
+                    </li>
+                    <li {% if '/kurslar/' in request.path %}class="active"{% endif %}><a href="{% url 'course:course-list' %}">
+                            <ion-icon name="play-outline" class="bg-gradient-to-br from-yellow-300 p-1 rounded-md side-icon text-opacity-80 text-white to-red-500">
+                            </ion-icon>
+                            <span>Video Kurs</span>
+                        </a>
+                    </li>
+                    <li {% if '/kategoriler/' == request.path %}class="active"{% endif %}><a href="{% url 'category' %}">
+                            <ion-icon name="layers-outline"  class="bg-gradient-to-br from-green-300 p-1 rounded-md side-icon text-opacity-80 text-white to-green-500">
+                            </ion-icon>
+                            <span>İçerik Kategorileri</span>
+                        </a>
+                    </li>
+                    <li {% if '/ai-arac-kategorileri/' == request.path %}class="active"{% endif %}><a href="{% url 'ai-tool-category' %}">
+                            <ion-icon name="barcode-outline" class="bg-gradient-to-br from-pink-300 p-1 rounded-md side-icon text-opacity-80 text-white to-red-500">
+                            </ion-icon>
+                            <span>Araç Kategorileri</span>
+                        </a>
+                    </li>
+                    <li><a href="https://yapayarsiv.com/" target="_blank">
+                        <ion-icon name="cube-outline" class="bg-gradient-to-br from-pink-300 p-1 rounded-md side-icon text-opacity-80 text-white to-red-500">
+                        </ion-icon>
+                        <span>Tüm Yapay Zekalar</span>
+                        </a>
+                     </li>
+                    <li {% if '/promptlar/' == request.path %}class="active"{% endif %}><a href="https://drive.google.com/drive/folders/1WJ6Bl7sm5R2_GA7R2e-xfBqGQB2gwowA?usp=sharing" target="_blank">
+                            <ion-icon name="code-slash-outline" class="bg-gradient-to-br from-purple-300 p-1 rounded-md side-icon text-opacity-80 text-white to-blue-500">
+                            </ion-icon>
+                            <span>Promptlar</span>
+                        </a>
+                    </li>
+                    <li {% if '/yardim/' == request.path %}class="active"{% endif %}><a href="{% url 'help:help-list' %}">
+                            <ion-icon name="help-circle-outline" class="bg-gradient-to-br from-purple-300 p-1 rounded-md side-icon text-opacity-80 text-white to-blue-500">
+                            </ion-icon>
+                            <span>Yardım Al</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="side_foot_links mobileDiv">
+                    <a href="https://wa.me/905010562045"> WhatsApp İletişim</a>
+                    <a href="https://yapayarsiv.com/hakkinda/"> Hakkında</a>
+                    <a href="https://yapayarsiv.com/kullanim-kosullari/"> Kullanım Koşulları</a>
+                    <a href="https://yapayarsiv.com/iletisim/"> İş Birliği</a>
+                    <a href="https://kurs.yapayarsiv.com/gizlilik-politikasi/"> Gizlilik Politikası ve Sorumluluk Reddi</a>
+
+                </div>
+
+            </div>
+
+            <div class="side_overly" uk-toggle="target: #wrapper ; cls: is-collapse is-active"></div>
+        </div>
+        
+    </div>
+
+ 
+    <script>
+        var timeout = null;
+
+        function search() {
+            var searchInput = $("#search_input").val();
+            document.getElementById("search_query_set").innerText ='"' +  $("#search_input").val() + '"';
+            document.getElementById("blog_search_result").style.display = "none";
+            document.getElementById("course_search_result").style.display = "none";
+            document.getElementById("help_search_result").style.display = "none";
+            document.getElementById("faq_search_result").style.display = "none";
+
+            $.ajax({
+                type: "GET",
+                url: "{% url 'api:base-search' %}?query="+searchInput,
+                success: function(response) {
+                    var blog_value = response.blog;
+                    var course_value = response.course;
+                    var help_value = response.help;
+                    var faq_value = response.faq;
+
+                    if (blog_value > 0){
+                        document.getElementById("blog_find").textContent = blog_value;
+                        document.getElementById("blog_search_result").style.display = "block";
+                        document.getElementById("blog_search_link").href = response.blog_search_link;
+
+
+                    }else {
+                        document.getElementById("blog_search_result").style.display = "none";
+                        document.getElementById("blog_find").textContent = "0";
+
+                    }
+
+
+                    if (course_value > 0){
+                        document.getElementById("course_find").textContent = course_value;
+                        document.getElementById("course_search_result").style.display = "block";
+                        document.getElementById("course_search_link").href = response.course_search_link;
+
+                    }else {
+                        document.getElementById("course_search_result").style.display = "none";
+                        document.getElementById("course_find").textContent = "0";
+
+                    }
+
+
+                    if (help_value > 0){
+                        document.getElementById("help_find").textContent = help_value;
+                        document.getElementById("help_search_result").style.display = "block";
+                        document.getElementById("help_search_link").href = response.help_search_link;
+
+
+                    }else {
+                        document.getElementById("help_search_result").style.display = "none";
+                        document.getElementById("help_find").textContent = "0";
+
+                    }
+
+                    if (faq_value > 0){
+                        document.getElementById("faq_find").textContent = faq_value;
+                        document.getElementById("faq_search_result").style.display = "block";
+                        document.getElementById("faq_search_link").href = response.faq_search_link;
+
+
+                    }else {
+                        document.getElementById("faq_search_result").style.display = "none";
+                        document.getElementById("faq_find").textContent = "0";
+
+                    }
+                    if (faq_value == 0 && course_value == 0 && blog_value == 0 && help_value == 0){
+                        
+                        document.getElementById("search_result_text").textContent = "için sonuç bulunamadı";
+                    }else{
+                        document.getElementById("search_result_text").textContent = "için arama sonuçları";
+                    }
+                    document.getElementById("search_results_bar").className = "header_search_dropdown uk-drop uk-open";
+
+                }
+            });
+        }
+
+        $("#search_input").on("input", function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                search();
+            }, 500); 
+        });
+
+     
+    </script>
+    <!-- Javascript
+    ================================================== -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'course/assets/js/uikit.js' %}"></script>
+    <script src="{% static 'course/assets/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'course/assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'course/assets/js/custom.js' %}"></script>
+    <script src="{% static 'course/assets/js/bootstrap-select.min.js' %}"></script>
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+{% block script %}
+
+{% endblock %}
+</body>
+
+</html>

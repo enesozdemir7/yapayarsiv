@@ -1,0 +1,178 @@
+{% extends 'course/management/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container md:space-y-10 space-y-6">
+
+    <!--  breadcrumb -->
+    <div class="breadcrumb-area py-0 justify-between sm:flex">
+        <div> 
+            <h3 class="md:text-2xl text-lg font-semibold mb-2"> {{ title }} </h3>
+            <div class="breadcrumb">
+                <ul class="m-0">
+                    <li>
+                        <a href="{% url 'management:index' %}"> <i class="icon-feather-home"></i> </a>
+                    </li>
+                    <li class="active">
+                        <a href="#">{{ title }}</a>
+                    </li>
+                </ul> 
+            </div>
+        </div>
+    </div> 
+    <div style="text-align: right;">
+        <button class="button" type="button" uk-toggle="target: #modal-close-default">Yeni Bildirim Ekle</button>
+   </div>
+    <div class="bg-white shadow rounded-md overflow-auto">
+
+        <div class="items-end justify-between p-5 sm:flex -mt-2 mb-2">
+            <h3 class="font-medium  text-gray-600">{{ course_count }} Bildirim {% if q %}, <b>{{ q }}</b> için arama sonuçları <a style="color: rgb(32, 128, 253);" href="{% url 'management:notifications' %}">Sonuçları Sıfırla</a>{% endif %} </h3>
+            <form method="get">
+            <div class="bg-white border flex items-center overflow-hidden relative rounded-lg">
+                <i class="pl-4 -mr-2 relative uil-search"></i>
+                <input class="flex-1 max-h-10" placeholder="Bildirim ara" name="q" {% if q %}value="{{ q }}"{% endif %} type="text">
+            </div>
+        </form>
+        </div>
+
+        <table class="sm:table-fixed w-full border-b">
+            <thead>
+                <tr class="border-b bg-gray-50 text-base text-black">
+                    <th class="w-1/12 p-3 font-medium">ID</th>
+                    <th class="w-6/12 p-3 font-medium">Başlık</th>
+                    <th class="w-6/12 p-3 font-medium">İletilen Kullanıcılar</th>
+                    <th class="w-6/12 p-3 font-medium">Gören Kullanıcılar</th>
+                    <th class="w-2/12 p-3 font-medium text-right">İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in all_obj %}
+                <tr>
+                    <td class="p-3">{{ b.id }}</td>
+                    <td class="flex items-center space-x-3 p-3 pr-0 w-52 sm:w-auto"> 
+                        <div class="flex-1 min-w-0">
+                            <div class="font-semibold mb-1 line-clamp-2"> {{ b.title }} </div>
+                        </div>
+                    </td>
+                   
+                    <td class="p-3 text-left"> 
+                        <div class="font-semibold mb-1 line-clamp-2"> {{ b.get_send_value }} </div>
+                    </td>
+                    <td class="p-3 text-left"> 
+                        <div class="font-semibold mb-1 line-clamp-2"> {{ b.get_show_value }} </div>
+                     </td>
+                    <td class="p-3 text-right"> 
+                        <a href="#" class="hover:bg-gray-200 p-1.5 inline-block rounded-full" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                            </svg>
+                        </a>
+                        <div class="bg-white w-44 shadow-lg border border-gray-100 p-2 mt-12 rounded-md text-gray-500 hidden text-left font-medium" 
+                        uk-drop="pos: bottom-right">
+                            <ul class="space-y-1">
+                            <li>
+                                <a href="{% url 'management:edit-notifications' id=b.id %}" class="px-3 py-2 rounded-md block hover:bg-gray-100"> Düzenle </a>
+                            </li>
+                            <li>
+                                <hr class="-mx-2 my-2 dark:border-gray-800">
+                            </li> 
+                            <li>
+                                <a href="{% url 'management:delete-notifications' id=b.id %}" class="px-3 py-2 rounded-md block text-red-500 hover:bg-red-100 hover:text-red-500 "> Sil </a>
+                            </li> 
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="flex items-center justify-between sm:flex-row flex-col mt-2 p-6">
+            <p class="mb-3"> {{ showing_title }} </p>
+
+            <div class="border divide-x flex font-medium items-center rounded-md text-gray-600">
+
+                {% if all_obj.has_previous %}
+                <a href="?page={{ all_obj.previous_page_number }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-5 hover:bg-gray-100"> Geri</a> 
+                {% endif %}
+
+                {% if all_obj.number|add:'-3' > 1 %}
+                <a href="?page={{ all_obj.number|add:'-4' }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 bg-gray-100"> 1</a> 
+                {% endif %}
+  
+                {% for i in all_obj.paginator.page_range %}
+                {% if all_obj.number == i %}
+                <a  class="py-2 px-3 bg-gray-100">{{ i }}</a> 
+
+                {% elif i > all_obj.number|add:'-4' and i < all_obj.number|add:'4' %}
+                    <a href="?page={{ i }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 hover:bg-gray-100"> {{ i }}</a> 
+                    {% endif %}
+                {% endfor %}
+                  
+                {% if all_obj.paginator.num_pages > all_obj.number|add:'3' %}
+                <a href="?page={{ all_obj.number|add:'4' }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 hover:bg-gray-100"> 3</a> 
+                {% endif %}
+                
+                {% if all_obj.has_next %}
+                <a href="?page={{ all_obj.next_page_number }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-5 hover:bg-gray-100"> İleri</a> 
+            
+                {% else %}
+            {% endif %}
+             
+            </div>
+        </div>
+
+    </div>  
+
+</div>
+
+<div id="modal-close-default" uk-modal="" class="uk-modal" >
+    <div class="uk-modal-dialog uk-modal-body rounded-md shadow-2xl">
+        <button class="uk-modal-close-default bg-gray-300 p-2 rounded-full m-3 uk-icon uk-close" type="button" uk-close=""><svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" data-svg="close-icon"><line fill="none" stroke="#000" stroke-width="1.1" x1="1" y1="1" x2="13" y2="13"></line><line fill="none" stroke="#000" stroke-width="1.1" x1="13" y1="1" x2="1" y2="13"></line></svg></button>
+        <h2 class="mb-2 uk-modal-title">Bildirim Ekle</h2>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div >
+                <label for="title" class="font-medium self-start"> Bildirim Başlığı <span class="text-red-600">*</span></label>
+                <input type="text" class="with-border" name="title" id="title" placeholder="Bildirim Başlığı">
+                <label for="link" class="font-medium self-start"> Bildirim Link <span >(Zorunlu değil)</span></label>
+                <input type="text" class="with-border" name="link" id="link" placeholder="Bildirim Link">
+            </div>
+           
+
+            <div style="padding: 10px; text-align: center;">
+                <button type="submit" class="button" name="addNotification">Oluştur</button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'course/assets/js/aksfileupload.js' %}"></script>
+<script>
+    $(function () {
+        $("aks-file-upload").aksFileUpload({
+            fileUpload: "#uploadfile",
+            dragDrop: true,
+            maxSize: "1 MB",
+            multiple: false,
+            maxFile: 1
+        });
+    });
+</script>
+
+<script>
+    window.onload = function() {
+      CKEDITOR.replace('content', {
+          toolbar: 'Basic',
+          uiColor: '#f1f1f1'
+      });
+      CKEDITOR.instances.content.setData( '<p>Some other editor data.</p>', function()
+  {
+      this.checkDirty();  
+  });
+    };
+  </script>
+
+{% endblock %}

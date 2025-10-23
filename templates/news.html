@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<head>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yapay Zeka Haberleri">
+<meta property="og:description" content="{{news.title}}">
+<meta property="og:site_name" content="Yapay Arşiv" />
+<meta property="og:image" content="https://yapayarsiv.com{{ news.banner.url }}">
+<meta property="og:image:secure_url" content="https://yapayarsiv.com{{ news.banner.url }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:title" content="Yapay Zeka Haberleri">
+<meta name="twitter:description" content="{{news.title}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://yapayarsiv.com{{ news.banner.url }}">
+<meta name="theme-color" content="#FFFFFF">
+</head>
+<style>
+    .fixed-image-index {
+  object-fit: cover;
+  object-position: center;
+  text-align: center;
+  width: 100%;
+  height: 210px;
+  border: none; 
+}
+
+.fix-height-text {
+  height: 150px;
+}
+
+@media screen and (max-width: 600px) {
+  .fix-height-text {
+    height: auto;
+  }
+}
+
+.fix-height-h {
+  height: 70px;
+}
+
+@media screen and (max-width: 600px) {
+  .fix-height-h {
+    height: auto;
+  }
+}
+</style>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h2>{{news.title}}</h2>
+                    
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-2" style="font-family:'Figtree', sans-serif;">{{news.created_at}}</div>
+                    <!-- Post categories-->
+
+                </header>
+
+                <!-- Preview image figure-->
+                <figure class="mb-4"><img class="img-fluid"  src="{{ news.banner.url }}" alt="{{news.title}}"></figure>
+                
+                <!-- Post content-->
+                <section class="mb-5" style="text-align: left;">
+                    <p >{{news.body|safe}}</p>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1778377270182761"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-1778377270182761"
+     data-ad-slot="8669395100"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                </section>
+            </article>
+            <!-- Comments section-->
+            
+        </div>
+
+        <div class="col-lg-4">
+            <h3>Diğer Haberler</h3>
+            <div class="row">
+                {% for n in get_other_news %}
+                <div class="col-md-12">
+                  <div class="card shadow-sm" style="flex-direction: column; ">
+                    <a href="{% url 'forum:news' slug=n.slug %}">
+                    <img class="fixed-image-index" style="object-fit: cover; border: solid 1px #0e020255;"  src="{{ n.banner.url }}" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="true"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></img>
+                    </a>
+                    <div class="card-body py-3">
+                      <div class="text-start">
+                        <h4 class="fix-height-h">{{n.title}}</h4>
+                      </div>
+                      <div class="fix-height-text">
+                      <p class="card-text">{{n.desc|safe|truncatechars:115}}</p>
+        
+                      <a href="{% url 'forum:news' slug=n.slug %}" class="btn btn-outline-dark">Devamını Oku</a>
+                      </div>
+                    </div>
+                  
+                  </div>
+                </div>
+        
+              {% endfor %}
+        
+            </div>
+        </div>
+
+        <!-- Side Widget Place -->
+    </div>
+</div>
+
+{% endblock body %}
+

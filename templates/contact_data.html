@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <article>
+                <header class="mb-4">
+                    <h3>ID No. "{{contact_data.contact_id}}" Olan Başvuru</h3>
+                    <div class="fst-italic mb-2">Gönderilme Tarihi: {{contact_data.created_at}}</div>
+                    <hr>
+                </header>
+
+                <section class="mb-5 text-start">
+                    <br>
+                    <h6>Email: {{contact_data.email}}</h6>
+                    <br>
+                    <h6>İsim-Soyisim: {{contact_data.name_surname}}</h6>
+                    <br>
+                    <h6>Başlık: {{contact_data.title}}</h6>
+                    <br>
+                    <h6>İçerik:</h6>
+
+                    <p class="fs-5 mb-4" style="font-size: medium;">
+                        &emsp;{{contact_data.body}}
+                    </p>
+                </section>
+                <br><br>
+            </article>
+        </div>
+    </div>
+</div>
+<br><br><br>
+{% endblock body %}
+

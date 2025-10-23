@@ -1,0 +1,24 @@
+{% extends 'course/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="text-2xl font-semibold mb-3 text-black"> {{ title  }} </div>
+<div class="md:p-7 p-5 bg-white rounded-md shadow lg:mt-10 mt-6">
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 md:gap-4 gap-2 -m-3">
+        {% for x in obj %}
+        <a href="{% url 'blog:blog-category' slug=x.slug %}">
+            <div class="hover:bg-gray-100 flex items-start px-3 py-2 rounded-lg space-x-3">
+                <img src="{{ x.icon.url }}" class="img-fluid" width="48" alt="">
+                <div>
+                    <h3 class="font-semibold text-lg">{{ x.name }}</h3>
+                    <div class="flex space-x-2 items-center text-sm pt-0.5">
+                        <div> {{ x.get_blog_count }} Post </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+</div>
+
+{% endblock %}

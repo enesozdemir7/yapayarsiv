@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3>Sponsorlu Araç Yönetimi</h3><br>
+<h6>{{request.user.email}} ile değişiklik yapmaktasınız</h6>
+<hr><br>
+
+{% if tools %}
+<h5>Tüm sponsorlu araçlar listelenmektedir</h5>
+<table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Araç İsmi</th>
+        <th scope="col">Başlık</th>
+        <th scope="col">Kategori</th>
+        <th scope="col">Alt Kategori</th>
+        <th scope="col">Ücret</th>
+        <th scope="col">Öncelikli mi?</th>
+        <th scope="col">Görünür mü?</th>
+        <th scope="col">Sil</th>
+      </tr>
+    </thead>
+    <tbody>
+
+        {% for tool in tools %}
+        <tr>
+            <th scope="row">{{tool.tool_id}}</th>
+            <td>{{tool.tool_name}}</td>
+            <td>{{tool.title}}</td>
+            <td>{{tool.category}}</td>
+            <td>{{tool.subcategory}}</td>
+            <td>{{tool.fee}}</td>
+            <td>{{tool.is_priority}}</td>
+            <td>{{tool.visible}}</td>
+            <td><a type="button" href="{% url 'tools:delete_ad' id=tool.tool_id %}" class="btn btn-outline-danger">Sponsorluğu Kaldır</a></td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+  </table>
+
+{% else %}
+<div class="alert alert-danger">
+    Sponsorlu araç bulunmamaktadır..
+</div>
+{% endif %}
+
+<br><br><br><br>
+<br><br><br><br>
+{% endblock body %}

@@ -1,0 +1,284 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/forum_style.css' %}">
+    <title>Yapay Arşiv</title>
+    <meta property="og:title" content="Yapay Arşiv Forum"/>
+    <meta property="og:description" content="Türkiye'nin Yapay Zeka Arşivi; Binlerce Yapay Zeka Aracı İçin Tek Platform!"/>
+    <meta property="og:image" content="https://yapayarsiv.com/media/profile_pic/yapayarsivlogo.png">
+    <style>
+        .hidden{
+            display: none;
+        }
+        .cookies-eu-banner {
+          background: #444;
+          color: #fff;
+          padding: 6px;
+          font-size: 13px;
+          text-align: center;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+          z-index: 10;
+        }
+        
+        .cookies-eu-banner button {
+          text-decoration: none;
+          background: #222;
+          color: #fff;
+          border: 1px solid #000;
+          cursor: pointer;
+          padding: 4px 7px;
+          margin: 2px 0;
+          font-size: 13px;
+          font-weight: 700;
+          transition: background 0.07s, color 0.07s, border-color 0.07s;
+        }
+        
+        .cookies-eu-banner button:hover {
+          background: #fff;
+          color: #222;
+        }
+      </style>
+</head>
+
+<body class="text-center">
+    <div class="cookies-eu-banner hidden" >
+        yapayarsiv.com'da size daha iyi bir hizmet sunmak için çerezleri kullanıyoruz. yapayarsiv.com'u kullanarak, çerez kullanımını kabul etmiş sayılırsınız. Daha fazla bilgi edinmek için <a style="color: rgb(255, 255, 255);" href="{% url 'forum:privacy' %}"><u>Gizlilik Politikası</u></a> sayfamızı ziyaret edebilirsiniz. <button>TAMAM</button>
+      </div>
+    <div class="flex-column">
+        <header class="mb-auto">
+            <style>
+                @font-face {
+                    font-family: 'Mont-Regular';
+                    src: url("{% static 'fonts/Mont-Regular.otf' %}") format('opentype');
+                }
+                h1, h2, h3, h4, h5, h6, nav {
+                    font-family: 'Figtree', sans-serif;
+                    font-weight: 700;
+                }
+                p {
+                    font-family: 'Figtree', sans-serif;
+                    font-weight: 400;
+                }
+
+                a {
+            text-decoration: none;
+        }
+                @font-face {
+                    font-family: 'FuturaPTLight';
+                    src: url("{% static 'fonts/FuturaPTLight.otf' %}") format('opentype');
+                }
+
+                .form-control {
+                  border-color: rgb(128, 128, 122) ;
+                }
+                .btn.btn-outline-secondary {
+                  border-color:  rgb(128, 128, 122) ;
+                }
+                hr.category {
+                  color:  rgb(128, 128, 122);
+                }
+                .nav-link:hover {
+                  box-shadow: 0 0 1px  rgb(128, 128, 122);
+                  text-shadow: 0 0 50px  rgb(0, 0, 0);
+                }
+                .card.shadow-sm:hover {
+                  border-color: rgb(128, 128, 122);
+                }
+              </style>
+          
+          <style>
+            body{
+              background-color: #F5F5F7;
+            }
+          </style>
+            <div>
+          {% include "includes/navbar.html" %}
+            </div>
+
+        </header>
+
+
+
+        <div style="margin-top: 50px;" class = "container">
+
+            <h3>Yapay Arşiv Forum - Çok Yakında!</h3>
+            
+
+        <!-- FORUM -->
+
+        <div class="container mt-5">
+            <!-- <h1 class="text-center">Yapay Arşiv Forum - Çok Yakında!</h1>
+            <hr> -->
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- Title List -->
+                    <div class="mb-3">
+                        
+
+                        <div class="card mt-2 text-lg-start">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+
+                                        <h5 class="card-title border-bottom" style="color: #000000;">
+                                            <i class="fas fa-comments" style="color: #ff7300;"></i>
+                                            Son Gönderiler
+                                        </h5>
+
+                                        <p class="card-text" style="color: #6b6b6b;">
+                                            {% for th in last_threads %}
+                                            &emsp;<i class="fas fa-comment" style="color: #616161;"></i>&emsp;
+                                            <a href="{% url 'forum:forum_thread' category_id=th.category.category_id subcategory_id=th.subcategory.subcategory_id thread_id=th.thread_id %}">
+                                            <b>{{th.title}}</b> - {{th.category.category}} - <small>{{th.user.name}} {{th.user.surname}}, {{th.created_at}}</small> 
+                                            </a>
+                                            {% endfor %}
+                                        </p>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        {% if category_list %}
+                        {% for category in category_list %}
+                        <div class="card mt-2 text-lg-start">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10 border-end">
+
+                                        <h5 class="card-title border-bottom" style="color: #000000;">
+                                            <i class="fas fa-angles-right" style="color: #ff7300;"></i>
+                                            <a href="{% url 'forum:forum_category' id=category.category_id %}">
+                                                {{category.category_name}} 
+                                            </a>
+                                        </h5>
+
+                                        <p class="card-text" style="color: #000000;">
+                                            &emsp;{{category.explanation}}
+                                        </p>
+                                    
+                                        <div class="row">
+                                            <div class="col"></div>
+                                            <div class="col-6">
+                                                <p class="card-text" style="color: #000000;">
+                                                    {% for subcategory in category.subcategories %}
+                                                        <i class="fas fa-chevron-right" style="color: #ff7300;"></i>
+                                                        <a href="{% url 'forum:forum_subcategory' category_id=category.category_id subcategory_id=subcategory.subcategory_id %}">
+                                                            {{subcategory.subcategory_name}}
+                                                        </a>
+                                                    {% endfor %}
+                                                </p>
+                                            </div>
+                                            <div class="col"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col align-self-center">
+
+                                        <p class="card-text" style="color: #000000;">
+                                            <small>Başlık: {{category.thread_count}}</small>
+                                            <small>Mesaj: {{category.comment_count}}</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="alert alert-danger">
+                            Henüz oluşturulmuş bir forum kategorisi bulunmamaktadır..
+                        </div>
+                        {% endif %}
+
+                        <!-- End of Forum Categories -->
+                    </div>
+                </div>
+                
+               <!-- <div class="col-md-4"> -->
+                    <!-- Right Bar -->
+                    <!-- <div class="mb-3"> -->
+
+                            <!-- <div class="row"> -->
+                              <!--   <div class="col-2"></div> -->
+                             <!--    <div class="col-9 text-lg-start"> -->
+                                    
+                                 <!--    <div class="card" style="width: 18rem; border-color: blueviolet;"> -->
+                                    <!--     <ul class="list-group list-group-flush"> -->
+                                    <!--         <li class="list-group-item">Aktif Kullanıcı Sayısı: {{user_count}}</li> -->
+                                     <!--        <li class="list-group-item">Aktif Konu Sayısı: {{thread_count}}</li> -->
+                                    <!--         <li class="list-group-item">Yapay Zeka Aracı Sayısı: {{tool_count}}</li> -->
+                                    <!--     </ul> -->
+                               <!--      </div> -->
+                            <!--     </div> -->
+                           <!--      <div class="col"></div> -->
+                        <!--     </div> -->
+                      <!--   </div> -->
+                  <!--   </div> -->
+                </div> 
+            </div>
+
+    </div>
+  
+</div>
+
+</body>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script>
+    const getCookie = (name) => {
+  const value = " " + document.cookie;
+  
+  const parts = value.split(" " + name + "=");
+  return parts.length < 2 ? undefined : parts.pop().split(";").shift();
+  };
+  
+  const setCookie = function (name, value, expiryDays, domain, path, secure) {
+  const exdate = new Date();
+  exdate.setHours(
+  exdate.getHours() +
+    (typeof expiryDays !== "number" ? 365 : expiryDays) * 24
+  );
+  document.cookie =
+  name +
+  "=" +
+  value +
+  ";expires=" +
+  exdate.toUTCString() +
+  ";path=" +
+  (path || "/") +
+  (domain ? ";domain=" + domain : "") +
+  (secure ? ";secure" : "");
+  };
+  
+  
+  const $cookiesBanner = document.querySelector(".cookies-eu-banner");
+  const $cookiesBannerButton = $cookiesBanner.querySelector("button");
+  const cookieName = "cookiesBanner";
+  const hasCookie = getCookie(cookieName);
+  
+  if (!hasCookie) {
+  $cookiesBanner.classList.remove("hidden");
+  }
+  
+  $cookiesBannerButton.addEventListener("click", () => {
+  setCookie(cookieName, "closed");
+  $cookiesBanner.remove();
+  });
+  
+  
+  (() => {
+  const $cookiesBanner = document.querySelector(".cookies-eu-banner");
+  const $cookiesBannerButton = $cookiesBanner.querySelector("button");
+  
+  $cookiesBannerButton.addEventListener("click", () => {
+  $cookiesBanner.remove();
+  });
+  })();
+  </script>
+</html>

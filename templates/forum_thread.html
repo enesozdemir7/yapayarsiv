@@ -1,0 +1,346 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/forum_style.css' %}">
+    <title>Yapay Arşiv</title>
+</head>
+
+<body class="text-center">
+    
+    <div class="flex-column">
+      <header class="mb-auto">
+        <style>
+            @font-face {
+                font-family: 'Mont-Regular';
+                src: url("{% static 'fonts/Mont-Regular.otf' %}") format('opentype');
+            }
+            h1, h2, h3, h4, h5, h6, nav {
+                    font-family: 'Figtree', sans-serif;
+                    font-weight: 700;
+                }
+                p {
+                    font-family: 'Figtree', sans-serif;
+                    font-weight: 400;
+                }
+                a {
+            text-decoration: none;
+        }
+            @font-face {
+                font-family: 'FuturaPTLight';
+                src: url("{% static 'fonts/FuturaPTLight.otf' %}") format('opentype');
+            }
+
+            .form-control {
+              border-color: rgb(128, 128, 122) ;
+            }
+            .btn.btn-outline-secondary {
+              border-color:  rgb(128, 128, 122) ;
+            }
+            hr.category {
+              color:  rgb(128, 128, 122);
+            }
+            .nav-link:hover {
+              box-shadow: 0 0 1px  rgb(128, 128, 122);
+              text-shadow: 0 0 50px  rgb(0, 0, 0);
+            }
+            .card.shadow-sm:hover {
+              border-color: rgb(128, 128, 122);
+            }
+          </style>
+      
+      <style>
+        body{
+          background-color: #F5F5F7;
+        }
+      </style>
+        <div>
+          {% include "includes/navbar.html" %}
+        </div>
+      </header>
+
+        <div style="margin-top: 50px;" class = "container">
+
+        <!-- FORUM -->
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-9">
+                    <!-- Title List -->
+                    <div class="mb-3">
+                        <div class="text-lg-start">
+                            <a type="button" href="{% url 'forum:forum_subcategory' category_id=category_id subcategory_id=subcategory_id %}" class="btn btn-outline-secondary">Geri</a>
+                        </div><br>
+
+                        <div class="card mt-2 text-lg-start border border-3 border-warning">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <h5 class="card-title border-bottom" style="color: #000000;">
+                                            <i class="fas fa-comments" style="color: #ff7300;"></i> &nbsp; {{threads.title}}
+                                            <br><hr>
+                                        </h5>
+                                        
+                                        <p class="card-text" style="color: #000000;">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="card mt-2 text-lg-start h-100  border border-3 border-warning">
+                                                        <div class="card-body text-center bg-dark">
+                                                            <div class="text-center">
+                                                                {% if threads.user.profile_pic %}
+                                                                    <img src="{{ threads.user.profile_pic.url }}" alt="avatar"
+                                                                        class="rounded-circle img-fluid" style="width: 110px;">
+                                                                {% else %}
+                                                                    <img src="{% static 'imgs/default_avatar.webp' %}" alt="avatar"
+                                                                        class="rounded-circle img-fluid" style="width: 110px;">
+                                                                {% endif %}
+
+                                                                {% if threads.user.name %}
+                                                                    <h5 class="my-3">{{threads.user.name}} {{threads.user.surname}}</h5>
+                                                                {% else %}
+                                                                    <h5 class="my-3">{{threads.user.email}}</h5>
+                                                                {% endif %}
+                                                                <br>
+
+                                                                <div class="p-0">
+                                                                    <ul class="list-group list-group-flush">
+
+                                                                        {% if threads.user.job %}
+                                                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+                                                                            
+                                                                            <i class="fas fa-user-doctor" style="color: #ffffff;"></i>
+                                                                            
+                                                                                <p class="mb-0" style="font-size: small;">{{threads.user.job}}</p>
+                                                                        </li>
+                                                                        {% else %}
+                                                                        {% endif %}
+
+                                                                        {% if threads.user.city %}
+                                                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+                                                                            
+                                                                            <i class="fas fa-map-location-dot" style="color: #ffffff;"></i>
+                                                                            
+                                                                                <p class="mb-0" style="font-size: small;">{{threads.user.city}}</p>
+                                                                        </li>
+                                                                        {% else %}
+                                                                        {% endif %}
+
+
+
+                                                                        {% if threads.user.github %}
+                                                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+                                                                            <i class="fab fa-github" style="color: #ffffff;"></i>
+                                                                            
+                                                                                <p class="mb-0" style="font-size: small;">{{threads.user.github}}</p>
+                                                                        </li>
+                                                                        {% else %}
+                                                                        <br>
+                                                                        {% endif %}
+
+                                                                        {% if threads.user.website %}
+                                                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+                                                                            <i class="fas fa-calendar" style="color: #ffffff;"></i>
+                                                                            
+                                                                                <p class="mb-0" style="font-size: small;">{{threads.user.date_joined}}</p>
+                                                                        </li>
+                                                                        {% else %}
+                                                                        <br>
+                                                                        {% endif %}
+
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-8 text-dark">
+                                                    <br><br><br>
+                                                        {{threads.body|safe}}
+                                                </div>
+                                        </p>
+                                        <p class="text-end h-end text-dark" style="font-size: small;">Oluşturulma Tarihi: {{threads.created_at }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-1">
+            
+                            </div>
+                            <div class="col-sm-11">
+                                
+                                {% for comment in comments %}
+                                
+                                <div class="card mt-3 text-lg-start border border-3 border-warning">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <p class="card-text" style="color: #000000;">
+                                                    <div class="row">
+                                                        <div class="col-sm-5">
+                                                            <div class="card mt-0 text-lg-start border border-3 border-warning">
+                                                                <div class="card-body text-center bg-dark">
+                                                                    <div class="text-center">
+                                                                        {% if comment.user.profile_pic %}
+                                                                            <img src="{{ comment.user.profile_pic.url }}" alt="avatar"
+                                                                                class="rounded-circle img-fluid" style="width: 110px;">
+                                                                        {% else %}
+                                                                            <img src="{% static 'imgs/default_avatar.webp' %}" alt="avatar"
+                                                                                class="rounded-circle img-fluid" style="width: 110px;">
+                                                                        {% endif %}
+            
+                                                                        {% if threads.user.name %}
+                                                                            <h5 class="my-3">{{comment.user.name}} {{comment.user.surname}}</h5>
+                                                                        {% else %}
+                                                                            <h5 class="my-3">{{comment.user.email}}</h5>
+                                                                        {% endif %}
+                                                                        <br>
+                                                                        <div class="p-0">
+                                                                            <ul class="list-group list-group-flush">
+        
+                                                                                {% if comment.user.job %}
+                                                                                <li class="list-group-item d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+                                                                                    
+                                                                                    <i class="fas fa-user-doctor" style="color: #ffffff;"></i>
+                                                                                    
+                                                                                        <p class="mb-0" style="font-size: small;">{{comment.user.job}}</p>
+                                                                                </li>
+                                                                                {% else %}
+                                                                                {% endif %}
+        
+                                                                                {% if comment.user.city %}
+                                                                                <li class="list-group-item d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+                                                                                    
+                                                                                    <i class="fas fa-map-location-dot" style="color: #ffffff;"></i>
+                                                                                    
+                                                                                        <p class="mb-0" style="font-size: small;">{{comment.user.city}}</p>
+                                                                                </li>
+                                                                                {% else %}
+                                                                                {% endif %}
+        
+        
+        
+                                                                                {% if comment.user.github %}
+                                                                                <li class="list-group-item d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+                                                                                    <i class="fab fa-github" style="color: #ffffff;"></i>
+                                                                                    
+                                                                                        <p class="mb-0" style="font-size: small;">{{comment.user.github}}</p>
+                                                                                </li>
+                                                                                {% else %}
+                                                                                <br>
+                                                                                {% endif %}
+        
+                                                                                {% if comment.user.website %}
+                                                                                <li class="list-group-item d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+                                                                                    <i class="fas fa-calendar" style="color: #ffffff;"></i>
+                                                                                    
+                                                                                        <p class="mb-0" style="font-size: small;">{{comment.user.date_joined}}</p>
+                                                                                </li>
+                                                                                {% else %}
+                                                                                <br>
+                                                                                {% endif %}
+        
+                                                                            </ul>
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+            
+                                                        <div class="col-sm-7 text-dark">
+                                                            <br><br>
+                                                                {{comment.body|safe}}
+                                                                
+                                        
+                                                        </div>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                        <p class="h-end text-dark" style="font-size: small;">Oluşturulma Tarihi: {{threads.created_at }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <br>
+
+                    
+                    {% if request.user.is_authenticated %}
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+
+                            <div class="col-sm-11">
+
+                                Yorum Yaz:
+                                <div class="mb-3">
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user" value="{{ request.user.user_id }}">
+                                        <input type="hidden" name="thread_id" value="{{ threads.thread_id }}">
+                                        {{form.media}}
+                                        {{form.body}}
+                                        <button type="submit" class="btn btn-outline-warning"> Gönder </button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+
+                <div class="col-md-4">
+                    <!-- Right Bar -->
+
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- FORUM -->
+
+
+    </div>
+    <br><br><br>
+</div>
+
+</body>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+</html>

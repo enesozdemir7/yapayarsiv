@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h2>{{post.title}}</h2>
+                    
+                    <!-- Post meta content-->
+                    {% if post.tool %}
+                    <div class="text-muted fst-italic mb-2">{{post.tool}}  , {{post.created_at}}</div>
+                    {% else %}
+                    <div class="text-muted fst-italic mb-2">{{post.created_at}}</div>
+                    {% endif %}
+                    
+                    <!-- Post categories-->
+                </header>
+
+                <!-- Preview image figure-->
+                <figure class="mb-4"><img class="img-fluid rounded" height="500" width="500" src="{{ post.thumbnail.url }}" alt="{{post.title}}"></figure>
+                
+                <!-- Post content-->
+                <section class="mb-5">
+                    <br>
+                    <p class="fs-5 mb-4">{{post.body|safe}}</p>
+                </section>
+            </article>
+            <!-- Comments section-->
+            
+        </div>
+
+        <!-- Side Widget Place -->
+    </div>
+</div>
+<br><br><br>
+{% endblock body %}
+

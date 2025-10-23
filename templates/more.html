@@ -1,0 +1,86 @@
+{% load i18n %}
+{% load infinite_scroll %}
+
+
+<div class="album" style="margin-top: 10px;">
+
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+          
+
+        {% for tool in feed %}
+        <div class="col-md-3" >
+            <div class="card shadow-sm" style="flex-direction: column; ">
+              <a href="{% url 'tools:tool' slug=tool.slug %}">
+              <img class="fixed-image-index" style="object-fit: cover;" width="100%" height="150" src="{{ tool.banner.url }}" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="true"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></img>
+              </a>
+              <div class="card-body py-3">
+                <div class="text-start">
+                  <h4 class="fix-height-h">{{tool.tool_name}}</h4>
+                </div>
+                <div class="fix-height-text">
+                  <p class="card-text">{{tool.body|safe|truncatechars:115}}</p>
+                  </div>
+                <div class="small-ratings align-items-center text-start">
+                  Stars:
+                  
+                  {% if tool.star > 0 %}
+                  <i class="fa fa-star" style="color: gold;"></i>
+
+                    {% if tool.star > 1 %}
+                    <i class="fa fa-star" style="color: gold;"></i>
+                    {% else %}
+                    <i class="fa fa-star"></i>
+                    {% endif %}
+
+                    {% if tool.star > 2 %}
+                    <i class="fa fa-star" style="color: gold;"></i>
+                    {% else %}
+                    <i class="fa fa-star"></i>
+                    {% endif %}
+
+                    {% if tool.star > 3 %}
+                    <i class="fa fa-star" style="color: gold;"></i>
+                    {% else %}
+                    <i class="fa fa-star"></i>
+                    {% endif %}
+
+                    {% if tool.star > 4 %}
+                    <i class="fa fa-star" style="color: gold;"></i>
+                    {% else %}
+                    <i class="fa fa-star"></i>
+                    {% endif %}
+
+
+                  {% else %}
+                  <i class="fa fa-star" style="opacity: 0.5;"></i>
+                  <i class="fa fa-star" style="opacity: 0.5;"></i>
+                  <i class="fa fa-star" style="opacity: 0.5;"></i>
+                  <i class="fa fa-star" style="opacity: 0.5;"></i>
+                  <i class="fa fa-star" style="opacity: 0.5;"></i>
+                  {% endif %}
+
+
+
+                </div><br>
+                <div  class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a type="button" href="{% url 'tools:tool' slug=tool.slug %}" class="btn btn-sm btn-outline-dark">Görüntüle</a>
+                    {% if request.user.is_staff %}
+                    <a type="button" href="{% url 'tools:update_tool' slug=tool.slug %}" class="btn btn-sm btn-outline-dark">Düzenle</a>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+
+      {% endfor %}
+
+    </div>
+
+</div>
+
+
+{% infinite_scroll_tags %}

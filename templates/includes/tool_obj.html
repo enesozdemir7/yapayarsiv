@@ -1,0 +1,73 @@
+
+{% for tool in tools %}
+
+
+
+
+<div class="col">
+  <div class="card shadow-sm">
+    <img class="bd-placeholder-img card-img-top" width="100%" height="160" src="{{tool.banner.url}}" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></img>
+
+    <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25)">
+      <div class="text-start">
+        {{tool.tool_name}}
+      </div><hr>
+      <p class="card-text">{{tool.body|safe}}</p>
+      <div class="small-ratings align-items-center text-start">
+        Stars:
+        
+        {% if tool.star > 0 %}
+        <i class="fa fa-star" style="color: gold;"></i>
+
+          {% if tool.star > 1 %}
+          <i class="fa fa-star" style="color: gold;"></i>
+          {% else %}
+          <i class="fa fa-star"></i>
+          {% endif %}
+
+          {% if tool.star > 2 %}
+          <i class="fa fa-star" style="color: gold;"></i>
+          {% else %}
+          <i class="fa fa-star"></i>
+          {% endif %}
+
+          {% if tool.star > 3 %}
+          <i class="fa fa-star" style="color: gold;"></i>
+          {% else %}
+          <i class="fa fa-star"></i>
+          {% endif %}
+
+          {% if tool.star > 4 %}
+          <i class="fa fa-star" style="color: gold;"></i>
+          {% else %}
+          <i class="fa fa-star"></i>
+          {% endif %}
+
+
+        {% else %}
+        <i class="fa fa-star" style="opacity: 0.5;"></i>
+        <i class="fa fa-star" style="opacity: 0.5;"></i>
+        <i class="fa fa-star" style="opacity: 0.5;"></i>
+        <i class="fa fa-star" style="opacity: 0.5;"></i>
+        <i class="fa fa-star" style="opacity: 0.5;"></i>
+        {% endif %}
+
+
+
+      </div><br>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="btn-group">
+          <button type="button" class="btn btn-sm btn-outline-light">Görüntüle</button>
+          {% if request.user.is_staff %}
+          <a type="button" href="{% 'tools:update_tool' id=tool.tool_id %}" class="btn btn-sm btn-outline-light">Düzenle</a>
+          {% else %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endfor %}
+

@@ -1,0 +1,80 @@
+{% extends 'course/base.html' %}
+{% block content %}
+<div class="uk-position-relative uk-visible-toggle overflow-hidden lg:-mt-20 uk-slideshow" tabindex="-1" uk-slideshow="animation: scale ;min-height: 200; max-height: 450 ;autoplay: t rue">
+
+    <ul class="uk-slideshow-items rounded" style="min-height: 450px;">
+        {% for s in sliders %}
+        <li tabindex="-1" class="uk-active uk-transition-active" style="">
+            <div class="uk-position-cover" uk-slideshow-parallax="scale: 1.2,1.2,1" style="transform: scale(1.2);">
+                <img src="{% if s.banner %}{{ s.banner.url }}{% endif %}" class="object-cover uk-cover" alt="" uk-cover="" style="height: 450px; width: 1996px;">
+            </div>
+            <div class="container relative md:p-20 md:mt-7 p-5 h-full"> 
+              <div uk-slideshow-parallax="scale: 1,1,0.8" class="flex flex-col justify-center h-full w-full space-y-3" style="transform: scale(1);">
+                  <h1 uk-slideshow-parallax="y: 100,0,0" class="lg:text-4xl text-2xl text-white font-semibold" style="transform: translateY(0px);"> {{ s.title }}</h1>
+                  <p uk-slideshow-parallax="y: 150,0,0" class="text-base text-white font-medium pb-4 lg:w-1/2" style="transform: translateY(0px);"> {{ s.desc }} </p>
+                  {% if s.button_link  %}<a uk-slideshow-parallax="y: 200,0,50" href="{{ s.button_link }}" class="bg-opacity-90 bg-white py-2.5 rounded-md text-base text-center w-32" style="transform: translateY(0px);"> Göz at </a> {% endif %}
+              </div>
+            </div>
+        </li> 
+        {% endfor %}
+        
+    </ul>
+
+    <ul class="uk-slideshow-nav uk-dotnav absolute bottom-0 left-0 m-7 lg:flex hidden"><li uk-slideshow-item="0" class="uk-active"><a href="#"></a></li><li uk-slideshow-item="1" class=""><a href="#"></a></li></ul>
+  </div>
+  <div class="container">
+  <div class="sm:my-4 my-3 flex items-end justify-between pt-3">
+    <h2 class="text-2xl font-semibold"> Kursları İncele  </h2>
+<a href="{% url 'course:course-list' %}" class="text-blue-500 sm:block hidden"> Tümünü Görüntüle </a>
+</div>
+<div class="mt-3">
+
+    <h4 class="py-3 border-b font-semibold text-grey-700  mx-1 mb-4" hidden=""> <ion-icon name="star" role="img" class="md hydrated" aria-label="star"></ion-icon> Featured today </h4>
+
+    <!--  slider -->
+    <div class="mt-3">
+
+        <h4 class="py-3 border-b font-semibold text-grey-700  mx-1 mb-4" hidden=""> <ion-icon name="star" role="img" class="md hydrated" aria-label="star"></ion-icon> Featured today </h4>
+
+        <div class="relative uk-slider" uk-slider="finite: true">
+
+            <div class="uk-slider-container px-1 py-3">
+
+                <ul class="uk-slider-items uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-small uk-grid" style="transform: translate3d(-287.25px, 0px, 0px);">
+                    {% for x in courses %}
+                    <li tabindex="-1" class="">
+
+                        <a href="{% url 'course:course-promotion' id=x.id %}" class="uk-link-reset">
+                                <div class="card uk-transition-toggle">
+                                    <div class="card-media h-40">
+                                        <div class="card-media-overly"></div>
+                                        <img src="{% if x.banner %}{{ x.banner.url }}{% endif %}" alt="" class="">
+                                        <span class="icon-play"></span>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <div style="height: 50px;" class="font-semibold line-clamp-2"> {{ x.title }}
+                                        </div>
+                                        <div class="flex space-x-2 items-center text-sm pt-3">
+                                            <div> {{ x.get_lesson_count }} Ders </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </a>
+
+                    </li>
+                    {% endfor %}
+
+
+                </ul>
+
+                <a class="absolute bg-white top-1/4 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
+                <a class="absolute bg-white top-1/4 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white uk-invisible" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,481 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head> 
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Courseplus is - Professional A unique and beautiful collection of UI elements">
+
+    <!-- Favicon -->
+    <link href="../assets/images/favicon.png" rel="icon" type="image/png">
+
+    <link rel="stylesheet" href="{% static 'course/assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'course/assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'course/assets/css/style.css' %}">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/demo.css" />
+
+    <script>
+        var lessons_index_list = [];
+        var get_next_lesson = null;
+        var active_li_id = null
+        var active_a = null;
+    </script>
+    <style>
+        progress {
+    width: 100%;
+    height: 10px;
+    }
+
+    progress::-webkit-progress-bar {
+        background-color: #f0f0f0; 
+    }
+
+    progress::-webkit-progress-value {
+        background-color: #10b981;
+    }
+
+        .mobil-content {
+        padding-top: 0px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .mobil-content {
+            padding-top: 60px;
+        }
+    }
+
+    </style>
+
+<style>
+    h1 {
+      font-size: 1.75em;
+      color: black;
+    }
+    
+    h2 {
+      font-size: 1.35em;
+      color: black;
+
+    }
+    
+    h3 {
+      font-size: 1.05em;
+      color: black;
+
+    }
+
+    </style>
+
+<style>
+    .course_video_style {
+        width: 100%;
+    }
+
+</style>
+
+<script>
+        $(document).ready(function(){
+            $('li').click(function(){
+                var liName = $(this).attr("name");
+
+                if (liName == "lesson_li"){
+
+                var liID = $(this).attr('id'); 
+                var active_li = document.getElementById(lessons_index_list[ parseInt(lessons_index_list.indexOf(active_li_id))]) ;
+                var next_li = document.getElementById(liID) ;
+                var next_lesson_div = document.getElementById("next_lesson_div");
+                next_lesson_div.style.display = "block";
+                var finish_course_div = document.getElementById("finish_course_div");
+                            finish_course_div.style.display = "none";
+                $.ajax({
+                    url:"{% url 'course:lesson-detail-api' %}", 
+                    method: 'POST',
+                    data: {data_key: liID},
+                    headers: {
+					'X-CSRFToken': "{{ csrf_token }}",
+				    },
+                    success: function(response){
+
+                        if (response.data.content){
+                            var get_content_div = document.getElementById("content_div");
+                            get_content_div.style.display = "block";
+                        }else{
+                            var get_content_div = document.getElementById("content_div");
+                            get_content_div.style.display = "none";
+                        }
+                        if (response.data.vimeo_embed_link){
+                            var get_content_div = document.getElementById("video_div");
+                            get_content_div.style.display = "block";
+                        }else{
+                            var get_content_div = document.getElementById("video_div");
+                            get_content_div.style.display = "none";
+                        }
+                        active_li.className = "";
+                        next_li.className = "uk-active";
+                        document.getElementById("video_li").innerHTML = `
+                          <div  class="plyr__video-embed" id="player" style="width:100%;">
+                                    <iframe referrerpolicy="strict-origin"
+                                    src="${response.data.vimeo_embed_link}"
+                                    allowfullscreen
+                                    allowtransparency
+                                    allow="autoplay"
+                                    id="embed_video"
+                                    
+                                    ></iframe>
+                                </div>                       
+                                `;
+                        const player = new Plyr(document.getElementById('player'));
+                        var get_embed_video = document.getElementById("embed_video");
+                        var get_text_content = document.getElementById("text_content");
+                        active_li_id = liID;
+
+                        get_text_content.innerHTML = response.data.content;
+                    },
+                    error: function(xhr, status, error){
+                        console.error(error);
+                    }
+                });
+            }else if (liName == "finished_li"){
+                var finish_course_div = document.getElementById("finish_course_div");
+                var next_lesson_div = document.getElementById("next_lesson_div");
+                var video_div = document.getElementById("video_div");
+                var content_div = document.getElementById("content_div");
+                var next_lesson_div = document.getElementById("next_lesson_div");
+
+                video_div.style.display = "none";
+                content_div.style.display = "none";
+                next_lesson_div.style.display = "none";
+
+                finish_course_div.style.display = "block";
+
+            }
+
+            });
+            {% if default_lesson %}
+            var next_li = document.getElementById("{{ default_lesson }}") ;
+            if (next_li){
+                                next_li.className = "uk-active";
+                                
+                                get_uk_div_root = document.getElementById("root_"+next_li.parentElement.parentElement.id);
+
+                                if (active_a != "a_"+next_li.parentElement.parentElement.id){
+                                    if (get_uk_div_root.classList.contains('uk-open')) {
+                                    
+                                    } else {
+                                        get_uk_a = document.getElementById("a_"+next_li.parentElement.parentElement.id);
+                                        get_uk_a.click();
+                                    }
+
+                                    active_a = "a_"+next_li.parentElement.parentElement.id;
+                                }
+                            }
+            document.getElementById({{ default_lesson }}).click();
+            {% else %}
+            console.log('default yok.')
+            var next_li = document.getElementById(active_li_id) ;
+            if (next_li){
+                                next_li.className = "uk-active";
+                                
+                                get_uk_div_root = document.getElementById("root_"+next_li.parentElement.parentElement.id);
+
+                                if (active_a != "a_"+next_li.parentElement.parentElement.id){
+                                    if (get_uk_div_root.classList.contains('uk-open')) {
+                                    
+                                    } else {
+                                        get_uk_a = document.getElementById("a_"+next_li.parentElement.parentElement.id);
+                                        get_uk_a.click();
+                                    }
+
+                                    active_a = "a_"+next_li.parentElement.parentElement.id;
+                                }
+                            }
+            document.getElementById(active_li_id).click();
+            {% endif %}
+
+        });
+        </script>
+ 
+</head>
+
+
+<body class="bg-white">
+
+    <div id="wrapper" class="course-watch course_video_style bg-white">  
+        
+        <!-- sidebar -->
+        <div class="sidebar">
+           
+            <!-- slide_menu for mobile -->
+            <span class="btn-close-mobi right-3 left-auto" uk-toggle="target: #wrapper ; cls: is-active"></span>
+
+            <!-- back to home link -->
+            <div class="flex justify-between lg:-ml-1 mt-1 mr-2">
+                <a href="{% url 'course:course-promotion' id=course.id %}" class="flex items-center text-blue-500">
+                    <ion-icon name="chevron-back-outline" class="md:text-lg text-2xl"></ion-icon>  
+                    <span class="text-sm md:inline hidden"> Kurstan Çık</span>
+                </a>
+            </div>
+
+            <!-- title -->
+            <h1 class="lg:text-2xl text-lg font-bold mt-2 line-clamp-2"> {{ title }} </h1>
+ 
+            <!-- sidebar list -->
+            <div class="sidebar_inner is-watch-2" data-simplebar>
+
+                <div class="lg:inline hidden">
+                    <div  class="rounded-md h-2 mt-4">
+                        <progress id="course_progress" value="{{ current_progress }}" max="100"></progress>
+                    </div>
+                    <div class="mt-2 mb-3 text-sm border-b pb-3">
+                        <div> <span id="course_progress_text">{{ current_progress }}</span>% Tamamlandı</div>
+                    </div>
+                </div>
+
+                <div id="curriculum"> 
+                    <div uk-accordion="multiple: true" class="divide-y space-y-3">
+                        {% for section in course.get_sections %}
+                        <div id="root_uk_div_{{ section.id }}"   class="pt-2 {% if forloop.first %}uk-open{% endif %}">
+                            <a id="a_uk_div_{{ section.id }}" class="uk-accordion-title text-md mx-2 font-semibold" href="#">   <div class="mb-1 text-sm font-medium"> Bölüm {{ forloop.counter }} </div>  {{ section.name }} </a>
+                            <div id="content_uk_div_{{ section.id }}" class="uk-accordion-content mt-3">
+                                <div id="uk_div_{{ section.id }}">
+                                <ul class="course-curriculum-list" uk-switcher="connect: #video_tabs; animation: animation: uk-animation-slide-right-small, uk-animation-slide-left-medium">
+                                    {% for lesson in section.get_lessons %}
+                                    <script>
+                                        lessons_index_list.push("{{ lesson.id }}");
+                                        {% if forloop.parentloop.first and forloop.first %}
+                                            active_li_id = "{{ lesson.id }}";
+                                            active_a = "a_uk_div_{{ section.id }}";
+                                        {% endif %}
+                                    </script>
+                                    <li name="lesson_li" style="border-radius: 10px; border: 2px solid rgb(255, 255, 255); {% if lesson.id in completed_lessons %}background-color:#d1fae5;{% endif %}" id="{{ lesson.id }}" {% if forloop.parentloop.first and forloop.first %}class="uk-active"{% endif %}>
+                                        <a href="#">
+                                             {{ lesson.title }}
+                                             <span class="text-sm ml-auto"> {% if lesson.vimeo_embed_link %}{{ lesson.video_time }} dk{% else %}okuma{% endif %} </span>
+
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div> 
+                <div id="course_finished_nav" style="display: none;" class="mt-5">
+                    <ul>
+                        <li name="finished_li"><a> <ion-icon name="checkmark-outline" style="color: #05986d;" class="side-icon md hydrated" role="img" aria-label="timer outline"></ion-icon> <b style="color: #404040;">Kurs Tamamlandı</b>  </a></li> 
+                    </ul>
+    
+                </div>
+
+            </div>
+
+            <!-- overly for mobile -->
+            <div class="side_overly" uk-toggle="target: #wrapper ; cls: is-collapse is-active"></div>
+            
+        </div> 
+
+        <!-- Main Contents -->
+        <div class="main_content mobil-content">
+
+            <div style="display: none;" id="video_div" class="relative">
+
+                <ul class="relative z-10" >
+                    <li id="video_li">
+                       
+                    </li>
+                </ul>
+ 
+                <div class="bg-gray-200 w-full h-full absolute inset-0 animate-pulse"></div>
+
+            </div>
+            <div id="next_lesson_div" style="text-align: center; padding: 15px;"> <button id="nextLessonButton" name="nextLessonButton" class="bg-green-100 text-green-600 py-2 px-4 rounded-md font-semibold ">Tamamla & Devam Et</button> </div>
+            <div style="display: none;" id="finish_course_div">
+                <div class="max-w-sm mx-auto uk-active" style="">
+
+                    <div class="flex flex-col items-center justify-center" style="padding-top: 50%; width: 100%;">
+                        <ion-icon name="checkmark-circle" class="hydrated mb-4 md text-5xl text-green-500" role="img" aria-label="checkmark circle"></ion-icon>
+                        <h6 class="font-semibold text-2xl mb-2">Tebrikler</h6>
+                        <h1 class="font-medium mb-12 text-gray-500">Kursu tamamladınız.</h1>
+                    </div>
+
+                </div>
+
+                </div>
+            <div id="content_div">
+            <nav class="border-b md:p-0 lg:px-6 bg-white ">
+                <ul uk-switcher="connect: #course-tabs; animation: uk-animation-fade">
+                    <li><a href="#" class="lg:px-2">  <h3>İçerik <ion-icon name="newspaper-outline"></ion-icon></h3>  </a></li>
+                </ul>
+            </nav>
+            
+            <div class="container">
+            
+                <div class="max-w-2xl lg:py-6 mx-auto uk-switcher" id="course-tabs" >
+            
+                    <div id="text_content">{{ first_lesson.content|safe }}</div>
+
+                </div>
+            </div>
+        </div>
+ 
+        </div>
+
+        
+    </div>
+    
+
+    <script>
+                $(document).ready(function(){
+                $('#nextLessonButton').click(function(){
+                    var next_lesson_div = document.getElementById("next_lesson_div");
+                    
+                    var lesson_count = lessons_index_list.length;
+                    if (lesson_count == parseInt(lessons_index_list.indexOf(active_li_id)) + 1){
+                        var next_li = null;
+                        next_lesson_div.style.display = "none";
+
+                    }else{
+                        next_lesson_div.style.display = "block";
+                        var next_li = document.getElementById(lessons_index_list[ parseInt(lessons_index_list.indexOf(active_li_id)) + 1]) ;
+                    }
+
+                    var active_li = document.getElementById(lessons_index_list[ parseInt(lessons_index_list.indexOf(active_li_id))]) ;
+                    $.ajax({
+                        url:"{% url 'course:lesson-detail-api' %}", 
+                        method: 'POST',
+                        data: {data_key: lessons_index_list[ parseInt(lessons_index_list.indexOf(active_li_id)) + 1],complete:active_li.id},
+                        headers: {
+                        'X-CSRFToken': "{{ csrf_token }}",
+                        },
+                        success: function(response){
+                            if (response.data.complete_lesson){
+                                active_li.style.backgroundColor = "#d1fae5";
+
+                            }
+                            if (response.data.content){
+                                var get_content_div = document.getElementById("content_div");
+                                get_content_div.style.display = "block";
+                            }else{
+                                var get_content_div = document.getElementById("content_div");
+                                get_content_div.style.display = "none";
+                            }
+                            if (response.data.vimeo_embed_link){
+                                var get_content_div = document.getElementById("video_div");
+                                get_content_div.style.display = "block";
+                            }else{
+                                var get_content_div = document.getElementById("video_div");
+                                get_content_div.style.display = "none";
+                            }
+                            active_li.className = "";
+                            if (next_li){
+                                next_li.className = "uk-active";
+                                
+                                get_uk_div_root = document.getElementById("root_"+next_li.parentElement.parentElement.id);
+
+                                if (active_a != "a_"+next_li.parentElement.parentElement.id){
+                                    if (get_uk_div_root.classList.contains('uk-open')) {
+                                    
+                                    } else {
+                                        get_uk_a = document.getElementById("a_"+next_li.parentElement.parentElement.id);
+                                        get_uk_a.click();
+                                    }
+
+                                    active_a = "a_"+next_li.parentElement.parentElement.id;
+                                }
+                            }
+                            var get_progress = document.getElementById("course_progress");
+                            var get_progress_text = document.getElementById("course_progress_text");
+                            
+                            get_progress.value = response.data.progress;
+                            get_progress_text.textContent = response.data.progress;
+                            
+                            if (get_progress.value == 100 && next_li == null){
+                                var finish_course_div = document.getElementById("finish_course_div");
+                                var course_finished_nav = document.getElementById("course_finished_nav");
+
+                                finish_course_div.style.display = "block";
+                                course_finished_nav.style.display = "block";
+
+                            }else{
+                                document.getElementById("video_li").innerHTML = `
+                                <div  class="plyr__video-embed" id="player" style="width:100%; padding:56.25% 0 0 0;position:relative;">
+                                    <iframe referrerpolicy="strict-origin"
+                                    src="${response.data.vimeo_embed_link}"
+                                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write" 
+                                    id="embed_video"
+                                    frameborder="0" 
+            
+                                    ></iframe>
+                                </div>        
+                                  `;                      
+                               
+                                
+                                const player = new Plyr(document.getElementById('player'));
+                                var get_embed_video = document.getElementById("embed_video");
+                                var get_text_content = document.getElementById("text_content");
+                                active_li_id = lessons_index_list[ parseInt(lessons_index_list.indexOf(active_li_id)) + 1] ;
+
+                                get_text_content.innerHTML = response.data.content;
+                            }
+                        
+
+                        },
+                        error: function(xhr, status, error){
+                            console.error(error);
+                        }
+                    });
+                });
+            });
+    </script>
+
+
+   {% if current_progress == 99 %}
+   <script>
+        var course_finished_nav = document.getElementById("course_finished_nav");
+        course_finished_nav.style.display = "block";
+
+        var finish_course_div = document.getElementById("finish_course_div");
+        var next_lesson_div = document.getElementById("next_lesson_div");
+        var video_div = document.getElementById("video_div");
+        var content_div = document.getElementById("content_div");
+        var next_lesson_div = document.getElementById("next_lesson_div");
+
+        video_div.style.display = "none";
+        content_div.style.display = "none";
+        next_lesson_div.style.display = "none";
+
+        finish_course_div.style.display = "block";
+
+
+   </script>
+
+
+   {% endif %}
+    <script>
+        function newPlayer(){
+        const player = new Plyr('#player');
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'course/assets/js/uikit.js' %}"></script>
+    <script src="{% static 'course/assets/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'course/assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'course/assets/js/custom.js' %}"></script>
+    <script src="{% static 'course/assets/js/bootstrap-select.min.js' %}"></script>
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,70 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Courseplus is - Professional A unique and beautiful collection of UI elements">
+    
+        <!-- Favicon -->
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="{% static 'course/assets/css/icons.css' %}">
+        <link rel="stylesheet" href="{% static 'course/assets/css/uikit.css' %}">
+        <link rel="stylesheet" href="{% static 'course/assets/css/style.css' %}">
+        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    </head>
+    <body style="background-color: #f9f7f7;">
+            <div class="container" style="padding-top: 40px; background-color: #f9f7f7;">
+               
+                
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center mb-10">
+                        <a href="#" class="-ml-2 inline-flex p-1.5 text-xl">
+                            <ion-icon name="chevron-back-outline"></ion-icon>
+                        </a>
+                       <a href=""> <h3 style="cursor: pointer;" class="font-semibold md:text-xl text-lg">Tanıtım Sayfası</h3></a>
+                    </div>
+
+                    <div class="mt-5 pt-6 space-y-6">
+
+
+
+                        <div class="px-6 pb-5">
+
+                            <div class="bg-white rounded-md shadow-md">
+                                
+                                <div class="text-center"><br>
+                                    <h2> <span class="text-danger"><ion-icon style="color: red;" name="close-circle-outline"></ion-icon>&nbsp;</span>Ödemeniz Alınırken Bir Hata Oluştu.</h2>
+                                    <br>
+                                    <a href="{% url 'join' %}" class="button">Ödeme sayfasına dön</a>
+                                </div><br>
+                
+                            </div>
+                        </div>
+                    </div>
+
+
+        
+                </div>
+                
+            {% include 'course/footer.html' %}
+        
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="{% static 'course/assets/js/uikit.js' %}"></script>
+        <script src="{% static 'course/assets/js/tippy.all.min.js' %}"></script>
+        <script src="{% static 'course/assets/js/simplebar.js' %}"></script>
+        <script src="{% static 'course/assets/js/custom.js' %}"></script>
+        <script src="{% static 'course/assets/js/bootstrap-select.min.js' %}"></script>
+        <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+        <script>
+            function goBack() {
+              window.history.back();
+            }
+        </script>
+    </body>
+</html>

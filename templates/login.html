@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+<style>
+.content{
+    padding: 12px 56px;
+    border: 1px solid gray;
+    place-items: center;
+    border-radius: 50px;
+    transition: 0.5s;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    align-items: center;
+    color: #3d4055;
+    background: #fff;
+    width: auto;
+    text-align: center;
+}
+
+.googleimg {
+  height: 20px;
+  margin: 0 6px 0 0;
+}
+
+.content:hover{
+    cursor: pointer;
+    background-color: rgb(236, 236, 236);
+}
+</style>
+
+<div class="row">
+
+    <div class="col-md-6 offset-md-3">
+        <h3>Giriş Yap</h3><br>       
+    </div>
+    <div class="col-md-4 offset-md-4">
+        <form method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <a href="{% url 'password_reset' %}" style="text-decoration: none;">Parolamı Unuttum</a><br><br>
+            <button type="submit" class="btn btn-outline-secondary">Giriş Yap</button>
+            <a  href="{% url 'user:register' %}" type="submit" class="btn btn-outline-secondary">Kayıt Ol</a>
+            <div style="padding: 15px;">
+                <span style="text-align: center;">Veya</span>
+            </div>
+            <div style="text-align: center;">
+              <a href="{% url 'social:begin' 'google-oauth2' %}" class="content"> 
+                <span> <img class="googleimg" src="https://freesvg.org/img/1534129544.png" alt="google"/> 
+                 Google İle Giriş Yap</span>
+                </a>
+            </div>
+        </form>
+    </div>
+  </div>
+  <br><br><br><br>
+
+
+{% endblock body %}
+

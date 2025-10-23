@@ -1,0 +1,20 @@
+{% load i18n %}
+{% load infinite_scroll %}
+
+<div class="album bg-dark" style="margin-top: 10px;">
+
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+          {% for post in feed %}
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <h6 class="text-start">{{post.title}}</h6>
+                <img class="bd-placeholder-img card-img-top" width="100" height="200" src="{{ post.thumbnail.url }}" aria-label="Placeholder: Thumbnail" focusable="false"></img>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+    </div>
+</div>
+
+{% infinite_scroll_tags %}

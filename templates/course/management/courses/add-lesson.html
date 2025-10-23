@@ -1,0 +1,136 @@
+{% extends 'course/management/base.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.snow.css" rel="stylesheet" />
+
+<div class="container">
+
+    <div class="lg:w-11/12 mx-auto">
+
+        <div class="flex items-center mb-10">
+            <a href="#" onclick="goBack()" class="-ml-2 inline-flex p-1.5 text-xl">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+            <h3 class="font-semibold md:text-xl text-lg"> {{ get_course_section.name }}</h3>
+        </div>
+
+        <div class="bg-white rounded-md shadow">
+
+            <h3 class="px-8 pt-5 mb-2 text-lg font-semibold">  {{ title }}</h3>
+            
+            <div class="z-20 bg-white overflow-hidden border-b" >
+                <nav class="cd-secondary-nav extanded px-6">
+                    <ul class="space-x-3" uk-switcher="connect: #form_tabs; animation: uk-animation-fade">
+                        <li><a href="#"> <ion-icon name="document-text-outline" class="pr-2 text-2xl lg:block hidden"></ion-icon>Ders İçeriği </a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <form class="uk-switcher" method="POST" enctype="multipart/form-data" id="form_tabs">
+                <!-- Basic  -->
+                <div class="p-8">
+                    <div >
+                        {% csrf_token %}
+
+                        <label for="title" class="font-medium"> Ders Başlığı <span class="text-red-600">*</span></label>
+                        <div class="col-span-2">
+                            <input type="text" id="title" name="title" class="shadow-none with-border" placeholder="Blog başlığı" required="">
+                        </div>
+                        
+                        <label for="vimeo_embed_link" class="font-medium"> Vimeo Embed Link <span class="text-red-600">*</span></label>
+                        <div class="col-span-2">
+                            <input type="text" id="vimeo_embed_link" name="vimeo_embed_link" class="shadow-none with-border" placeholder="Vimeo Embed Link">
+                        </div>
+
+                        <label for="video_time" class="font-medium"> Video Süresi (dakika cinsinden) <span class="text-red-600">*</span></label>
+                        <div class="col-span-2">
+                            <input type="number" step="0.01" id="video_time" name="video_time" class="shadow-none with-border" placeholder="Video Süresi">
+                        </div>
+
+                        <label for="content" class="font-medium"> İçerik <span class="text-red-600">*</span></label>
+                        <div id="content"></div>
+                        <input type="text" name="content" id="content_input" hidden>
+
+                        <div class="text-center" style="padding: 10px;">
+                            <button type="button" onclick="submitForm()" name="createBlog" class="button">Kaydet</button>
+                       </div>
+                          
+                    </div>
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'course/assets/js/aksfileupload.js' %}"></script>
+<script>
+    $(function () {
+        $("aks-file-upload").aksFileUpload({
+            fileUpload: "#uploadfile",
+            dragDrop: true,
+            maxSize: "1 MB",
+            multiple: false,
+            maxFile: 1
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.js"></script>
+
+<script>
+
+
+    const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['blockquote', 'code-block'],
+    ['link', 'image', 'video', 'formula'],
+  
+    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+    [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+    [{ 'direction': 'rtl' }],                         // text direction
+  
+    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+  
+    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+    [{ 'font': [] }],
+    [{ 'align': [] }],
+  
+    ['clean']                                         // remove formatting button
+  ];
+  
+  const quill = new Quill('#content', {
+    modules: {
+      toolbar: toolbarOptions
+    },
+    theme: 'snow'
+  });
+  
+  </script>
+
+<script>
+    function submitForm(){
+        var get_form = document.getElementById("form_tabs");
+        document.getElementById("content_input").value = quill.root.innerHTML;
+        console.log('tıklandı.')
+        get_form.submit();
+    }
+    </script>
+
+<script>
+    function goBack() {
+      window.history.back();
+    }
+</script>
+{% endblock %}

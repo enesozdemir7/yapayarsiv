@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3>Gönderi Yönetimi</h3><br>
+<h6>{{request.user.email}} ile değişiklik yapmaktasınız</h6>
+<hr><br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+
+    <div class="col-md-4">
+      <form>
+        {% csrf_token %}
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Ara.." name="keyword" maxlength="64">
+          <button class="btn btn-outline-warning" type="submit"><i class="fas fa-search" ></i></button>
+        </div>
+    </form>
+    </div>
+
+    <div class="col-md-4"></div>
+  </div>
+</div>
+<br>
+
+<a type="button" href="{% url 'forum:add_post' %}" class="btn btn-outline-warning">Yeni Gönderi Ekle</a>
+<br><br>
+{% if posts %}
+<h5>Son eklenen 10 adet gönderi listelenmektedir</h5>
+
+<table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Başlık</th>
+        <th scope="col">Numara</th>
+        <th scope="col">Görünür mü?</th>
+        <th scope="col">Tarih</th>
+        <th scope="col">Güncelle</th>
+        <th scope="col">Sil</th>
+      </tr>
+    </thead>
+    <tbody>
+        
+        {% for post in posts %}
+        <tr>
+            <th scope="row">{{post.post_id}}</th>
+            <td>{{post.title}}</td>
+            <td>{{post.no}}</td>
+            <td>{{post.visible}}</td>
+            <td>{{post.created_at}}</td>
+            <td><a type="button" href="{% url 'forum:update_post' id=post.post_id %}" class="btn btn-outline-warning">Güncelle</a></td>
+            <td><a type="button" href="{% url 'forum:delete_post' id=post.post_id %}" class="btn btn-outline-danger">Sil</a></td>
+        </tr>
+        {% endfor %}
+        
+    </tbody>
+  </table>
+
+{% else %}
+<div class="alert alert-danger">
+    Kayıtlı gönderi bulunamadı..
+</div>
+{% endif %}
+
+<br><br><br><br>
+<br><br><br><br>
+{% endblock body %}

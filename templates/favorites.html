@@ -1,0 +1,247 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3>Favori Listesi</h3>
+
+<style>
+  #moving-element, #moving-element-sec {
+      position: relative;
+      top: 0;
+      transition: top 0.3s; 
+  }
+  .card {
+    transition: transform 0.3s;
+  }
+  .card:hover {
+    transform: scale(1.04);
+  }
+
+  @media screen and (max-width: 767px) {
+  .card-border {
+    border: 2px solid rgba(0,0,0,1);
+}
+  }
+  .btn-primary {
+  font-family: Raleway-SemiBold;
+  font-size: 13px;
+  color: rgba(58, 133, 191, 0.75);
+  letter-spacing: 1px;
+  line-height: 15px;
+  border: 2px solid rgba(58, 133, 191, 0.75);
+  border-radius: 40px;
+  background: transparent;
+  transition: all 0.3s ease 0s;
+}
+
+.fixed-image-index {
+  object-fit: cover;
+  object-position: center;
+  text-align: center;
+  width: 100%;
+  height: 210px;
+  border: none; 
+}
+
+
+.fix-height-text {
+  height: 134px;
+}
+
+@media screen and (max-width: 575px) {
+  .fix-height-text {
+    height: auto;
+  }
+}
+
+.fix-height-h {
+  height: 60px;
+}
+
+@media screen and (max-width: 575px) {
+  .fix-height-h {
+    height: auto;
+  }
+}
+
+</style>
+
+<style>
+  ::-webkit-scrollbar{
+       height: 8px;
+       width: 10px;
+       background: rgb(228, 226, 226);
+   }
+   ::-webkit-scrollbar-thumb:horizontal{
+       background: #6d6a6a;
+       border-radius: 10px;
+
+   }
+   ::-webkit-scrollbar-thumb:vertical{
+       background: #6d6a6a;
+       border-radius: 20px;
+
+   }
+
+
+.styled-horizontal-scrollable-div {
+ width: 100%;
+ white-space: nowrap;
+ overflow-x: auto;
+ border: none;
+ padding: 0px;
+
+ scrollbar-width: thin; 
+ scrollbar-color:  transparent;
+ height: 65px;
+
+
+}
+
+ @media (max-width: 767px) {
+.styled-horizontal-scrollable-div {
+ width: 100%;
+ white-space: nowrap;
+ overflow-x: auto;
+ border: none;
+ padding: 0px;
+
+ scrollbar-width: thin; 
+ scrollbar-color: #212529 transparent;
+ height: 65px;
+
+}
+}
+
+.nav-scrollable {
+ display: flex;
+ overflow-x: auto;
+ padding: 10px;
+ flex-wrap: wrap; 
+}
+
+.nav-link {
+ white-space: nowrap;
+ margin-right: 15px; 
+}
+
+
+@media (max-width: 767px) {
+ .nav-scrollable {
+   flex-wrap: nowrap;
+   overflow-x: auto; 
+ }
+}
+.nav-scrollable-tags {
+   flex-wrap: nowrap;
+   overflow-x: auto; 
+ }
+
+
+</style>
+
+{% if tool_favorited %}
+  <div class="row">
+    <div class="col-12">
+  
+    <div class="album py-5">
+      <div style="margin-top: 50px;" class="container">
+  
+          <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+  
+            {% for fav in tool_favorited %}
+  
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+              <div class="card shadow-sm card-border" style="flex-direction: column; ">
+                <a href="{% url 'tools:tool' slug=fav.tool.slug %}">
+                <img class="fixed-image-index" style="object-fit: cover;"  src="{{ fav.tool.banner.url }}" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="true"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></img>
+                </a>
+                <div class="card-body py-3">
+                  <div class="text-start">
+                    <h4 class="fix-height-h">{{fav.tool.tool_name}}</h4>
+                  </div>
+                  <div class="fix-height-text">
+                  <p class="card-text">{{fav.tool.body|safe|truncatechars:115}}</p>
+                  </div>
+                  <div class="small-ratings align-items-center text-start">
+                    {% if fav.tool.star > 0 %}
+                    <i class="fa fa-star" style="color: gold;"></i>
+  
+                      {% if fav.tool.star > 1 %}
+                      <i class="fa fa-star" style="color: gold;"></i>
+                      {% else %}
+                      <i class="fa fa-star"></i>
+                      {% endif %}
+  
+                      {% if fav.tool.star > 2 %}
+                      <i class="fa fa-star" style="color: gold;"></i>
+                      {% else %}
+                      <i class="fa fa-star"></i>
+                      {% endif %}
+  
+                      {% if fav.tool.star > 3 %}
+                      <i class="fa fa-star" style="color: gold;"></i>
+                      {% else %}
+                      <i class="fa fa-star"></i>
+                      {% endif %}
+  
+                      {% if fav.tool.star > 4 %}
+                      <i class="fa fa-star" style="color: gold;"></i>
+                      {% else %}
+                      <i class="fa fa-star"></i>
+                      {% endif %}
+  
+  
+                    {% else %}
+                    <i class="fa fa-star" style="opacity: 0.5;"></i>
+                    <i class="fa fa-star" style="opacity: 0.5;"></i>
+                    <i class="fa fa-star" style="opacity: 0.5;"></i>
+                    <i class="fa fa-star" style="opacity: 0.5;"></i>
+                    <i class="fa fa-star" style="opacity: 0.5;"></i>
+                    {% endif %}
+  
+  
+  
+                  </div>
+                  <div id="tags" class="styled-horizontal-scrollable-div" style="padding: 15px;">
+                    <a href="?fee={{tool.fee}}"><span class="badge bg-dark text-light">{{ tool.fee }}</span></a>&nbsp;
+                    {% for tag in fav.tool.subcategory.all %}
+                    <a href="{% url 'index' %}?tag={{tag.slug}}"><span class="badge bg-dark text-light">{{ tag.name }}</span></a>&nbsp;
+                    {% endfor %}
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center" style="padding: 15px;">
+                    <div class="btn-group">
+                      <a type="button" href="{% url 'tools:tool' slug=fav.tool.slug %}" class="btn btn-sm btn-outline-dark">Görüntüle</a>
+                      {% if request.user.is_staff %}
+                      <a type="button" href="{% url 'tools:update_tool' slug=fav.tool.slug %}" class="btn btn-sm btn-outline-dark">Düzenle</a>
+                      {% else %}
+                      {% endif %}
+                      <a type="button" href="{% url 'tools:remove_favorited' fav_id=fav.id %}" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"></i></a>
+
+                    </div>
+                  </div>
+                </div>
+              
+              </div>
+            </div>
+          {% endfor %}
+   
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  
+    </div>
+  </div>
+  
+
+{% else %}
+<div class="alert alert-danger">
+    Favorilere eklenmiş bir araç bulunamadı..
+</div>
+{% endif %}
+<br><br><br><br>
+<br><br><br><br>
+{% endblock body %}

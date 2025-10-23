@@ -1,0 +1,249 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<style>
+  #moving-element, #moving-element-sec {
+      position: relative;
+      top: 0;
+      transition: top 0.3s; 
+  }
+</style>
+
+
+<h3>Gönderiler</h3><br>
+<hr><br>
+
+<div class="row">
+
+    <div class="col-12">
+  
+    <div class="album py-5 bg-dark">
+      <div style="margin-top: 50px;" class="container">
+  
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="40%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+  
+              <div class="card-body py-3 text-white" style="background-color: rgb(26, 25, 25);">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-light">View</button>
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-outline-light">Edit</button>
+                    {% else %}
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">9 mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    </div>
+  </div>
+<br><br><br>
+
+
+
+<script>
+    var movingElement = document.getElementById("moving-element");
+    var startingPosition = 300;
+    var stopPosition = 1950;
+
+    window.addEventListener("scroll", function() {
+
+        var scrollY = window.scrollY || window.pageYOffset;
+        var pageHeight = document.body.clientHeight;
+        var newPosition = Math.max(scrollY - startingPosition, 0);
+
+        if (pageHeight - scrollY <= stopPosition) {
+            newPosition = pageHeight - stopPosition;
+        }
+
+        movingElement.style.top = newPosition + "px";
+    });
+</script>
+
+<script>
+  var movingElementSec = document.getElementById("moving-element-sec");
+  var startingPosition = 300;
+  var stopPosition = 1950;
+
+  window.addEventListener("scroll", function() {
+
+      var scrollY = window.scrollY || window.pageYOffset;
+      var pageHeight = document.body.clientHeight;
+      var newPosition = Math.max(scrollY - startingPosition, 0);
+
+      if (pageHeight - scrollY <= stopPosition) {
+          newPosition = pageHeight - stopPosition;
+      }
+
+      movingElementSec.style.top = newPosition + "px";
+  });
+</script>
+
+{% endblock body %}
+
+
+

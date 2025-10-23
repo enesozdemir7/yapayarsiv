@@ -1,0 +1,99 @@
+{% extends 'course/management/base.html' %}
+
+{% block content %}
+<div class="container md:space-y-10 space-y-6">
+
+    <!--  breadcrumb -->
+    <div class="breadcrumb-area py-0 justify-between sm:flex">
+        <div> 
+            <h3 class="md:text-2xl text-lg font-semibold mb-2"> {{ title }} </h3>
+            <div class="breadcrumb">
+                <ul class="m-0">
+                    <li>
+                        <a href="{% url 'management:index' %}"> <i class="icon-feather-home"></i> </a>
+                    </li>
+                    <li class="active">
+                        <a href="#">{{ title }}</a>
+                    </li>
+                </ul> 
+            </div>
+        </div>
+    </div> 
+    <div class="bg-white shadow rounded-md overflow-auto">
+
+        <div class="items-end justify-between p-5 sm:flex -mt-2 mb-2">
+            <h3 class="font-medium  text-gray-600">{{ members_count }} Üye {% if q %}, <b>{{ q }}</b> için arama sonuçları <a style="color: rgb(32, 128, 253);" href="{% url 'management:blog' %}">Sonuçları Sıfırla</a>{% endif %} </h3>
+            <form method="get">
+            <div class="bg-white border flex items-center overflow-hidden relative rounded-lg">
+                <i class="pl-4 -mr-2 relative uil-search"></i>
+                <input class="flex-1 max-h-10" placeholder="Kullanıcı adı, Email ara" name="q" {% if q %}value="{{ q }}"{% endif %} type="text">
+            </div>
+        </form>
+        </div>
+
+        <table class="sm:table-fixed w-full border-b">
+            <thead>
+                <tr class="border-b bg-gray-50 text-base text-black">
+                    <th class="w-6/12 p-3 font-medium">Kullanıcı</th>
+                    <th class="w-4/12 p-3 font-medium text-left">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in members %}
+                <tr>
+                    <td class="flex items-center space-x-3 p-3 pr-0 w-52 sm:w-auto"> 
+                        {% if b.profile_pic %}<img src="{{ b.profile_pic.url }}" alt="" class="h-12 w-16 -ml-3 object-cover rounded-md md:block hidden"> {% endif %}
+                        <div class="flex-1 min-w-0">
+                            <div class="font-semibold mb-1 line-clamp-2"> {{ b.username }} </div>
+                            <span class="text-gray-600 text-sm font-medium "> {{ b.full_name }} </span>
+                        </div>
+                    </td>
+                    <td>
+                        {{ b.email }}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="flex items-center justify-between sm:flex-row flex-col mt-2 p-6">
+            <p class="mb-3"> {{ showing_title }} </p>
+
+
+            <div class="border divide-x flex font-medium items-center rounded-md text-gray-600">
+
+                {% if members.has_previous %}
+                <a href="?page={{ members.previous_page_number }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-5 hover:bg-gray-100"> Geri</a> 
+                {% endif %}
+
+                {% if members.number|add:'-3' > 1 %}
+                <a href="?page={{ members.number|add:'-4' }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 bg-gray-100">&hellip;</a> 
+                {% endif %}
+  
+                {% for i in members.paginator.page_range %}
+                {% if members.number == i %}
+                <a  class="py-2 px-3 bg-gray-100">{{ i }}</a> 
+
+                {% elif i > members.number|add:'-4' and i < members.number|add:'4' %}
+                    <a href="?page={{ i }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 hover:bg-gray-100"> {{ i }}</a> 
+                    {% endif %}
+                {% endfor %}
+                  
+                {% if members.paginator.num_pages > members.number|add:'3' %}
+                <a href="?page={{ members.number|add:'4' }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 hover:bg-gray-100">&hellip;</a> 
+                {% endif %}
+                
+                {% if members.has_next %}
+                <a href="?page={{ members.next_page_number }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-5 hover:bg-gray-100"> İleri</a> 
+            
+                {% else %}
+            {% endif %}
+             
+            </div>
+        </div>
+
+    </div>  
+
+</div>
+{% endblock %}

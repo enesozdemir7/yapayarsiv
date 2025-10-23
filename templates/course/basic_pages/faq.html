@@ -1,0 +1,47 @@
+{% extends 'course/base.html' %}
+{% block content %}
+<div class="md:pt-16 md:pb-7 py-6 bg-blue-600 lg:-mt-20">
+    
+    <div class="container m-auto px-4">
+        <div class="flex flex-col justify-center items-center md:p-7 text-white">
+            
+            <div class="lg:text-4xl text-2xl font-semibold mb-6"> Yardıma mı İhtiyacın Var? </div>
+
+            <div class="bg-white mb-3 relative rounded-md lg:w-2/3 w-full shadow-md" id="search">
+                <form method="get">
+                    <ion-icon name="search-outline" class="absolute h-full hydrated left-3 text-lg md text-gray-600" role="img" aria-label="search outline"></ion-icon>
+                    <input placeholder="Ara" name="q" {% if q %}value="{{ q }}"{% endif %} class="focus:outline-none h-12 pl-10 rounded-lg w-full" style="color: rgb(53, 53, 53);">
+                </form>
+            </div>
+
+            <p class="text-sm text-center">
+                Merak ettiğiniz bir konu hakkında arama yapabilirsiniz.
+            </p> 
+
+     </div>
+   
+    </div>
+
+
+</div>
+
+<div class="py-12">
+    <div class="container lg:w-10/12"> 
+        <div style="padding-top: 15px; padding-bottom: 15px;">
+            {% if q %}<a style="color: rgb(47, 47, 255);" href="{% url 'faq' %}">Aramayı temizle</a>{% endif %}
+        </div>
+        <h1 class="text-2xl font-semibold mb-4"> {{ title }}</h1>
+        <ul class="uk-accordion space-y-2" uk-accordion="">
+            {% for x in obj %}
+          <li class="bg-white px-6 py-4 rounded shadow hover:shadow-md">
+            <a class="uk-accordion-title text-base" href="#"><b>{{ x.question }}</b></a>
+            <div class="uk-accordion-content mt-3" hidden="" aria-hidden="true">
+               <p>{{ x.reply }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
+      </div>
+</div>
+{% endblock %}

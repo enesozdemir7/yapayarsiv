@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3>Haber Yönetimi</h3><br>
+<h6>{{request.user.email}} ile değişiklik yapmaktasınız</h6>
+<hr><br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+
+    <div class="col-md-4">
+      <form>
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <input type="text" class="form-control " placeholder="Ara.." name="keyword" maxlength="64">
+            <button class="btn btn-outline-warning" type="submit"><i class="fas fa-search" ></i></button>
+          </div>
+      </form>
+    </div>
+
+    <div class="col-md-4"></div>
+  </div>
+</div>
+<br>
+
+<a type="button" href="{% url 'forum:add_news' %}" class="btn btn-outline-warning">Yeni Haber Ekle</a>
+<br><br>
+{% if all_news %}
+<h5>Son eklenen 25 adet haber listelenmektedir</h5>
+<table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th scope="col">News ID</th>
+        <th scope="col">Başlık</th>
+        <th scope="col">Yazar</th>
+        <th scope="col">Tarih</th>
+        <th scope="col">Görünür mü?</th>
+        <th scope="col">Sponsorlu mu?</th>
+        <th scope="col">Güncelle</th>
+        <th scope="col">Sil</th>
+      </tr>
+    </thead>
+    <tbody>
+
+        {% for news in all_news %}
+
+        <tr>
+            <th scope="row">{{news.news_id}}</th>
+            <td>{{news.title}}</td>
+            <td>{{news.owner}}</td>
+            <td>{{news.created_at}}</td>
+            <td>{{news.visible}}</td>
+            <td>{{news.sponsored}}</td>
+            <td><a type="button" href="{% url 'forum:update_news' id=news.news_id %}" class="btn btn-outline-warning">Güncelle</a></td>
+            <td><a type="button" href="{% url 'forum:delete_news' id=news.news_id %}" class="btn btn-outline-danger">Sil</a></td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+  </table>
+
+{% else %}
+<div class="alert alert-danger">
+    Kayıtlı haber bulunamadı..
+</div>
+{% endif %}
+
+<br><br><br><br>
+<br><br><br><br>
+{% endblock body %}

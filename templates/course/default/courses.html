@@ -1,0 +1,295 @@
+{% extends 'course/base.html' %}
+{% block content %}
+<style>
+    .movie--isloading {
+  height: 252px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.movie--isloading .loading-image {
+  height: 190px;
+  background-image: -webkit-linear-gradient(left, #ececec 0px, #f4f4f4 40px, #ececec 80px);
+  background-image: -o-linear-gradient(left, #ececec 0px, #f4f4f4 40px, #ececec 80px);
+  background-image: linear-gradient(90deg, #ececec 0px, #f4f4f4 40px, #ececec 80px);
+  background-size: 250px;
+  -webkit-animation: shine-loading-image 2s infinite ease-out;
+          animation: shine-loading-image 2s infinite ease-out;
+}
+
+.movie--isloading .loading-content {
+  background: #f7f7f7;
+  padding: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.movie--isloading .loading-content .loading-text-container {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+}
+
+.movie--isloading .loading-content .loading-main-text {
+  height: 10px;
+  width: 65%;
+  margin-bottom: 10px;
+  background: #ececec;
+  background-image: -webkit-linear-gradient(left, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-image: -o-linear-gradient(left, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-image: linear-gradient(90deg, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-size: 250px;
+  border-radius: 10px;
+  -webkit-animation: shine-loading-container-items 2s infinite ease-out;
+          animation: shine-loading-container-items 2s infinite ease-out;
+}
+
+.movie--isloading .loading-content .loading-sub-text {
+  height: 10px;
+  width: 50%;
+  background: #ececec;
+  background-image: -webkit-linear-gradient(left, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-image: -o-linear-gradient(left, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-image: linear-gradient(90deg, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-size: 250px;
+  border-radius: 10px;
+  -webkit-animation: shine-loading-container-items 2s infinite ease-out;
+          animation: shine-loading-container-items 2s infinite ease-out;
+}
+
+.movie--isloading .loading-content .loading-btn {
+  width: 60px;
+  height: 25px;
+  background: #ececec;
+  background-image: -webkit-linear-gradient(left, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-image: -o-linear-gradient(left, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-image: linear-gradient(90deg, #ececec 0px, #ddd 40px, #ececec 80px);
+  background-size: 250px;
+  border-radius: 3px;
+  -webkit-animation: shine-loading-container-items 2s infinite ease-out;
+          animation: shine-loading-container-items 2s infinite ease-out;
+}
+
+
+@-webkit-keyframes shine-loading-image {
+  0% {
+    background-position: -32px;
+  }
+  40%, 100% {
+    background-position: 208px;
+  }
+}
+
+
+@keyframes shine-loading-image {
+  0% {
+    background-position: -32px;
+  }
+  40%, 100% {
+    background-position: 208px;
+  }
+}
+
+@-webkit-keyframes shine-loading-container-items {
+  0% {
+    background-position: -100px;
+  }
+  40%, 100% {
+    background-position: 140px;
+  }
+}
+
+@keyframes shine-loading-container-items {
+  0% {
+    background-position: -100px;
+  }
+  40%, 100% {
+    background-position: 140px;
+  }
+}
+</style>
+<div class="container md:space-y-10 space-y-5">
+
+    <div>
+
+        <div class="md:flex justify-between items-center mb-8 pt-4">
+
+            <div>
+                <div class="text-xl font-semibold"> {{ title }} </div>
+                <div class="text-sm mt-2 font-medium text-gray-500 leading-6">  <b id="article_count">0</b> Toplam Kurs  </div>
+            </div>
+
+            <div class="flex items-center justify-end">
+              
+            </div>
+        </div>
+      
+        <!-- course list -->
+        <div id="searchResults" class="grid lg:grid-cols-3 md:grid-cols-2 gap-5">
+            
+        </div>
+        <div id="loadingEfect" style="padding-top: 15px;">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                      <div class="movie--isloading">
+                        <div class="loading-image"></div>
+                        <div class="loading-content">
+                          <div class="loading-text-container">
+                            <div class="loading-main-text"></div>
+                            <div class="loading-sub-text"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                      <div class="movie--isloading">
+                        <div class="loading-image"></div>
+                        <div class="loading-content">
+                          <div class="loading-text-container">
+                            <div class="loading-main-text"></div>
+                            <div class="loading-sub-text"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                      <div class="movie--isloading">
+                        <div class="loading-image"></div>
+                        <div class="loading-content">
+                          <div class="loading-text-container">
+                            <div class="loading-main-text"></div>
+                            <div class="loading-sub-text"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        </div>
+        <!-- Pagination -->
+        <div class="flex justify-center mt-9 space-x-2 text-base font-semibold text-gray-400 items-center">
+                <button class="bg-gray-100 border hover:bg-gray-200 px-4 py-1.5 rounded-full text-sm"  id="loadMoreButton">Daha fazla göster</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    var next_page_link = null;
+    var loadMore = document.getElementById("loadMoreButton");
+    var url = "/api/course";
+    var active_request = false;
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        loadMore.disabled = true;
+        getArticles();
+    });
+
+    $("#loadMoreButton").click(function(){
+          loadMore.disabled = true;
+          getArticles();
+        });
+
+    function getArticles(){
+          if (active_request == false){
+            active_request = true;
+          document.getElementById("loadingEfect").style.display = "block";
+          if (url == "/api/course"){
+            get_data = { {% if q %}query:"{{ q }}"{% endif %}};
+          }else{
+              get_data = { {% if q %}query:"{{ q }}"{% endif %}};
+          }
+          $.ajax({
+                  url: url,
+                  type: 'GET',
+                  contentType: 'application/json',
+                  data:get_data,
+                  dataType: 'json',
+                  success: function(response) {
+                      next_page_link = response.next;
+                      url = response.next;
+                      active_request = false;
+                      appendArticles(response);
+            },
+                  error: function(response){
+                    active_request = false;
+                  }
+
+        });
+      }
+
+        }
+
+
+        
+        function appendArticles(response) {
+            //$("#searchResults").empty();
+            document.getElementById("loadingEfect").style.display = "block";
+              var postsContainer = $("#searchResults");
+              document.getElementById("article_count").textContent = response.count;
+              if (response.count < 1 ){
+                loadMore.disabled = true;
+                loadMore.textContent = "Gösterilecek daha fazla konu yok";
+                
+              }else{
+                loadMore.disabled = false;
+                loadMore.textContent = "Daha fazla göster";
+              }
+              if (Array.isArray(response.results) && response.results.length > 0){
+              response.results.forEach(function (course) {
+                var postHtml = `
+                <a href="/kurslar/${course.id}/" class="uk-link-reset">
+                <div class="card uk-transition-toggle">
+                    <div class="card-media h-40">
+                        <div class="card-media-overly"></div>
+                        <img src="${course.banner}" alt="" class="">
+                        <span class="icon-play"></span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div style="height: 50px;" class="font-semibold line-clamp-2"> ${course.title}
+                        </div>
+                        <div class="flex space-x-2 items-center text-sm pt-3">
+                            <div> ${course.lesson_count} Ders </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+                `;
+    
+                postsContainer.append(postHtml);
+              });
+              if (url == null){
+                loadMore.textContent = "Gösterilecek daha fazla konu yok";
+                document.getElementById("loadingEfect").style.display = "none";
+                    }else{
+                      loadMore.disabled = false;
+    
+                    }
+    
+            }else{
+              loadMore.textContent = "Gösterilecek daha fazla konu yok";
+              document.getElementById("loadingEfect").style.display = "none";
+            }
+              document.getElementById("loadingEfect").style.display = "none";
+            }
+    
+    
+            document.querySelectorAll('input[name="search_type"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                if (this.value === 'scholar') {
+                    document.getElementById('detailFilter').style.display = 'none';
+                } else {
+                    document.getElementById('detailFilter').style.display = 'inline';
+                }
+            });
+        });
+
+</script>
+{% endblock %}

@@ -1,0 +1,167 @@
+{% extends 'course/management/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+    
+<div class="container">
+
+    <!--  breadcrumb -->
+    <div class="breadcrumb-area justify-between py-0 sm:flex mb-8">
+        <div> 
+            <h3 class="md:text-2xl text-lg font-semibold mb-2"> {{ title }} </h3>
+            <div class="breadcrumb">
+                <ul class="m-0">
+                    <li>
+                        <a href="{% url 'management:index' %}"> <i class="icon-feather-home"></i> </a>
+                    </li>
+                    <li class="active">
+                        <a href="#">{{ title }}</a>
+                    </li>
+                </ul> 
+            </div>
+        </div>
+      
+    </div>
+
+    <div class="lg:w-11/12 mx-auto">
+
+        <div class="bg-white rounded-md shadow">
+
+            <h3 class="px-8 pt-5 mb-2 text-lg font-semibold">{{ title }}</h3>
+            
+            <div class="z-20 bg-white overflow-hidden border-b" >
+                <nav class="cd-secondary-nav extanded px-6">
+                    <ul class="space-x-3" uk-switcher="connect: #form_tabs; animation: uk-animation-fade">
+                        <li><a href="#"> <ion-icon name="cog-outline" class="pr-2 text-2xl lg:block hidden"></ion-icon>Genel Ayarlar</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <form class="uk-switcher" method="POST" enctype="multipart/form-data" id="form_tabs">
+                <!-- Basic  -->
+                <div class="p-8">
+                    <div >
+                        {% csrf_token %}
+
+                        {% if obj %}
+                        <label for="title" class="font-medium">AnaSayfa Başlık <span class="text-red-600">*</span></label>
+                        <div class="col-span-2">
+                            <input type="text" required id="title" name="title" value="{{ obj.title }}" class="shadow-none with-border" placeholder="AnaSayfa Başlık" required="">
+                        </div>
+
+                        <label for="desc" class="font-medium"> Meta Açıklama <span class="text-red-600">*</span></label>
+                        <div class="col-span-2">
+                            <input type="text" required id="desc" name="desc" value="{{ obj.desc }}" class="shadow-none with-border" placeholder="Meta Açıklama" required="">
+                        </div>
+
+                        <label for="keywords" class="font-medium"> Meta Anahtar Kelimeler <span class="text-red-600">*</span></label>
+                        <div class="col-span-2">
+                            <input type="text" required id="keywords" name="keywords" value="{{ obj.keywords }}" class="shadow-none with-border" placeholder="Anahtar Kelimeler" required="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fav_icon" class="form-label">Fav İcon*</label>
+                            <div class="mb-3">
+                                <b>Mevcut Fav İcon</b>: {{ obj.fav_icon_name }}
+                                <input class="form-control" type="file" name="fav_icon" id="fav_icon">
+                              </div>
+                          </div>
+                          <div class="mb-3">
+                            <label for="logo" class="form-label">Site Logo*</label>
+                            <div class="mb-3">
+                                <b>Mevcut Logo</b>: {{ obj.logo_name }}
+                                <input class="form-control" type="file" name="logo" id="logo">
+                              </div>
+                          </div>
+                          <div class="mb-3">
+                            <label for="dark_logo" class="form-label">Site Logo Dark*</label>
+                            <div class="mb-3">
+                                <b>Mevcut Dark Logo</b>: {{ obj.dark_logo_name }}
+                                <input class="form-control" type="file" name="dark_logo" id="dark_logo">
+                              </div>
+                          </div>
+          
+                          {% else %}
+                          <label for="title" class="font-medium">AnaSayfa Başlık <span class="text-red-600">*</span></label>
+                          <div class="col-span-2">
+                              <input type="text" id="title" name="title" class="shadow-none with-border" placeholder="AnaSayfa Başlık" required="">
+                          </div>
+  
+                          <label for="desc" class="font-medium"> Meta Açıklama <span class="text-red-600">*</span></label>
+                          <div class="col-span-2">
+                              <input type="text" id="desc" name="desc" class="shadow-none with-border" placeholder="Meta Açıklama" required="">
+                          </div>
+  
+                          <label for="keywords" class="font-medium"> Meta Anahtar Kelimeler <span class="text-red-600">*</span></label>
+                          <div class="col-span-2">
+                              <input type="text" id="keywords" name="keywords" class="shadow-none with-border" placeholder="Anahtar Kelimeler" required="">
+                          </div>
+                          <div class="mb-3">
+                              <label for="fav_icon" class="form-label">Fav İcon*</label>
+                              <div class="mb-3">
+                                  <input class="form-control" type="file" name="fav_icon" id="fav_icon">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                              <label for="logo" class="form-label">Site Logo Light*</label>
+                              <div class="mb-3">
+                                  <input class="form-control" type="file" name="logo" id="logo">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dark_logo" class="form-label">Site Logo Dark*</label>
+                                <div class="mb-3">
+                                    <input class="form-control" type="file" name="dark_logo" id="dark_logo">
+                                  </div>
+                              </div>
+                            {% endif %}
+
+                        <div class="text-center" style="padding: 10px;">
+                            <button type="submit" name="saveButton" class="button">Kaydet</button>
+                       </div>
+                          
+                    </div>
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+    </div>
+
+
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'course/assets/js/aksfileupload.js' %}"></script>
+<script>
+    $(function () {
+        $("aks-file-upload").aksFileUpload({
+            fileUpload: "#uploadfile",
+            dragDrop: true,
+            maxSize: "1 MB",
+            multiple: false,
+            maxFile: 1
+        });
+    });
+</script>
+
+<script>
+    window.onload = function() {
+      CKEDITOR.replace('content', {
+          toolbar: 'Basic',
+          uiColor: '#f1f1f1'
+      });
+      CKEDITOR.instances.content.setData('', function()
+  {
+      this.checkDirty();  
+  });
+    };
+  </script>
+
+{% endblock %}

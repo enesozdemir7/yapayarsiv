@@ -1,0 +1,125 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Yapay Arşiv Akademi - Gizlilik Politikası">
+
+    <!-- Favicon -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'course/assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'course/assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'course/assets/css/style.css' %}">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body style="background-color: #f9f7f7;">
+    <div class="container">
+
+        <div class="max-w-3xl lg:p-8 pb-0 mx-auto">
+
+            <!-- Article content -->
+            <div class="md:space-y-4 space-y-3 leading-8 md:text-base">
+                
+                <div class="text-gray-500"> Son Güncelleme Tarihi: 18 Ağustos 2024</div>
+                <div class="font-semibold md:text-3xl text-2xl text-gray-700 pt-5"> Gizlilik Politikası </div>
+                
+                <div class="md:leading-9">Bu gizlilik politikası ("Gizlilik Politikası"), Yapay Arşiv Akademi (“biz,” “bize,” ve/veya “bizim”) olarak, çevrimiçi topluluğumuzu veya mobil ya da diğer indirilebilir uygulamalarımızı (topluca, “Topluluk”) kullanan bireylerden (“siz” ve/veya “sizin”) bilgi toplama, kullanma ve ifşa etme yöntemlerimizi açıklar. Gizlilik Politikasının yanı sıra, Topluluğu kullanmanız ayrıca Hizmet Şartlarımızın da kapsamındadır.</div>
+
+                <div class="md:leading-9">Bu Gizlilik Politikasında değişiklik yapma hakkını saklı tutarız. Eğer değişiklik yaparsak, politikanın tepesindeki tarihi güncelleyerek sizi bilgilendireceğiz ve bazı durumlarda (örneğin, bilgilerinizin bu Gizlilik Politikasından farklı bir şekilde kullanılması planlanıyorsa) size ek bir bildirim sağlayacağız (örneğin, bir bildirim göndererek).</div>
+
+                <div class="md:leading-9">Topluluğa eriştiğinizde veya bizimle etkileşimde bulunduğunuzda, bilgi uygulamalarımız hakkında bilgi sahibi olmak ve size sunulan seçeneklerden haberdar olmak için bu Gizlilik Politikasını incelemenizi öneririz.</div>
+                
+                <div class="font-semibold md:text-2xl text-xl text-gray-700 pt-8">Topladığımız Kişisel Bilgiler</div>
+
+                <div class="font-semibold md:text-xl text-lg text-gray-700 pt-6">Bize Sağladığınız Kişisel Bilgiler</div>
+                <div class="md:leading-9">
+                    <ul class="list-disc ml-5">
+                        <li><strong>Kayıt ve Profil Bilgileri:</strong> Hesap açarken, adınız, e-posta adresiniz gibi tanımlayıcı ve iletişim bilgilerinizi sağlamanızı isteyebiliriz.</li>
+                        <li><strong>İletişim:</strong> Topluluğun interaktif özelliklerine katıldığınızda, bir form doldurduğunuzda, platformumuzda beyanlarda bulunduğunuzda veya müşteri desteği talep ettiğinizde sağladığınız bilgileri toplayabiliriz. Üyeler arasında gönderilen mesajlar da buna dahildir.</li>
+                        <li><strong>İçerik:</strong> Blog yorumları yaparken veya çevrimiçi topluluklara katılırken paylaştığınız içerik ve bilgileri toplayabiliriz.</li>
+                        <li><strong>Ödeme Bilgileri:</strong> PayTR aracılığıyla yapılan satın alımlarınızda ödeme ile ilgili bilgilerinizi toplayabiliriz.</li>
+                    </ul>
+                </div>
+
+                <div class="font-semibold md:text-xl text-lg text-gray-700 pt-6">Topluluk Üzerinden Otomatik Olarak Toplanabilecek Kişisel Bilgiler</div>
+                <div class="md:leading-9">
+                    <ul class="list-disc ml-5">
+                        <li><strong>Cihaz Tanımlayıcıları:</strong> IP adresi, internet hizmet sağlayıcısı, cihaz türü gibi bilgiler.</li>
+                        <li><strong>İnternet veya Diğer Elektronik Ağ Etkinlik Bilgileri:</strong> Kullanım bilgileri, tıklanan bağlantılar, izlenen videolar gibi internet etkinliklerinizi izleyebiliriz.</li>
+                        <li><strong>Coğrafi Konum Bilgileri:</strong> IP adresinizden türetilen cihazınızın yaklaşık konumu.</li>
+                        <li><strong>Çerezler ve Benzeri Teknolojilerden Toplanan Bilgiler:</strong> Çerezler ve benzeri teknolojiler kullanarak bilgi toplayabiliriz.</li>
+                    </ul>
+                </div>
+
+                <div class="font-semibold md:text-xl text-lg text-gray-700 pt-6">Üçüncü Taraflardan Toplanan Kişisel Bilgiler</div>
+                <div class="md:leading-9">
+                    <ul class="list-disc ml-5">
+                        <li><strong>Üçüncü Taraf Kaynaklardan Bilgiler:</strong> Üçüncü taraf sosyal medya platformlarından, pazarlama ortaklarından veya diğer üçüncü taraflardan sizinle ilgili bilgiler alabiliriz.</li>
+                    </ul>
+                </div>
+
+                <div class="font-semibold md:text-2xl text-xl text-gray-700 pt-8">Kişisel Bilgilerin Kullanımı</div>
+                <div class="md:leading-9">Topladığımız bilgileri aşağıdaki amaçlarla kullanabiliriz:</div>
+                <div class="md:leading-9">
+                    <ul class="list-disc ml-5">
+                        <li>Topluluğu sağlamak, sürdürmek ve iyileştirmek.</li>
+                        <li>İşlemleri işlemek ve kayıt tutmak.</li>
+                        <li>Teknik bildirimler, güncellemeler, güvenlik uyarıları ve destek mesajları göndermek.</li>
+                        <li>Yorumlarınıza, sorularınıza yanıt vermek ve müşteri hizmeti sağlamak.</li>
+                        <li>Promosyonlar, ödüller ve etkinlikler hakkında sizi bilgilendirmek.</li>
+                        <li>Hileli işlemleri tespit etmek ve önlemek.</li>
+                        <li>İç yönetim amaçları için kayıt tutmak.</li>
+                    </ul>
+                </div>
+
+                <div class="font-semibold md:text-2xl text-xl text-gray-700 pt-8">Kişisel Bilgilerin İfşası</div>
+                <div class="md:leading-9">
+                    <ul class="list-disc ml-5">
+                        <li><strong>Ortaklar ve Bağlı Kuruluşlar:</strong> Bilgilerinizi ortaklarımız, bağlı kuruluşlarımız ve iştiraklerimizle paylaşabiliriz.</li>
+                        <li><strong>PayTR:</strong> Ödemelerinizi işlemek için PayTR ile bilgilerinizi paylaşabiliriz.</li>
+                        <li><strong>Hizmet Sağlayıcılar ve Satıcılar:</strong> Bilgilerinizi, Topluluğu sağlamak amacıyla diğer hizmet sağlayıcılar ve satıcılarla paylaşabiliriz.</li>
+                        <li><strong>Topluluk Üyeleri:</strong> Bilgilerinizi diğer üyelerle paylaşırsanız, bu bilgiler kamuya açık hale gelebilir.</li>
+                        <li><strong>Yasal ve Hukuki Zorunluluklar:</strong> Kanuni bir talep doğrultusunda veya yasal bir sürecin gerektirdiği hallerde bilgilerinizi paylaşabiliriz.</li>
+                        <li><strong>Kontrol Değişikliği Durumunda:</strong> Birleşme, varlık satışı veya benzeri durumlarda bilgilerinizi devredebiliriz.</li>
+                        <li><strong>Rızanız:</strong> Bilgilerinizi sizin rızanız doğrultusunda paylaşabiliriz.</li>
+                    </ul>
+                </div>
+
+                <div class="font-semibold md:text-2xl text-xl text-gray-700 pt-8">Güvenlik</div>
+                <div class="md:leading-9">Bilgilerinizi korumak için güvenlik önlemleri alırız, ancak internet üzerinden yapılan veri iletiminin tamamen güvenli olduğunu garanti edemeyiz.</div>
+
+                <div class="font-semibold md:text-2xl text-xl text-gray-700 pt-8">Seçenekleriniz</div>
+                <div class="md:leading-9">
+                    <ul class="list-disc ml-5">
+                        <li><strong>Hesap Bilgileri:</strong> Hesap bilgilerinizi güncelleyebilir, düzeltebilir veya hesabınızı kapatmak için bizimle iletişime geçebilirsiniz.</li>
+                        <li><strong>Konum Bilgileri:</strong> Cihaz ayarlarından konum bilgisi toplamayı durdurabilirsiniz.</li>
+                        <li><strong>Pazarlama İletişimleri:</strong> Tanıtım e-postalarından aboneliğinizi iptal edebilirsiniz.</li>
+                    </ul>
+                </div>
+
+                <div class="font-semibold md:text-2xl text-xl text-gray-700 pt-8">İletişim</div>
+                <div class="md:leading-9">Bu Gizlilik Politikası hakkında sorularınız varsa, bizimle <a href="mailto:yapayarsiv@gmail.com">yapayarsiv@gmail.com</a> adresinden iletişime geçebilirsiniz.</div>
+            
+            </div>
+        </div>
+        
+        {% include 'course/footer.html' %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'course/assets/js/uikit.js' %}"></script>
+    <script src="{% static 'course/assets/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'course/assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'course/assets/js/custom.js' %}"></script>
+    <script src="{% static 'course/assets/js/bootstrap-select.min.js' %}"></script>
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+    <script>
+        function goBack() {
+          window.history.back();
+        }
+    </script>
+</body>
+</html>

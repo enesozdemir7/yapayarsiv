@@ -1,0 +1,257 @@
+{% extends 'course/management/base.html' %}
+{% load i18n %}
+{% block content %}
+<link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<style>
+  .container {
+  display: grid;
+
+}
+
+.box {
+  border: 1px solid #ececec;
+  background-color: #fdfdfd;
+  padding: 10px;
+  cursor: move;
+
+ 
+}
+.box.over {
+  border: 3px dotted #ff0000;
+}
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+    
+      var dragSrcEl = null;
+      
+      function handleDragStart(e) {
+        this.style.opacity = '0.4';
+        
+        dragSrcEl = this;
+    
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+      }
+    
+      function handleDragOver(e) {
+        if (e.preventDefault) {
+          e.preventDefault();
+        }
+    
+        e.dataTransfer.dropEffect = 'move';
+        
+        return false;
+      }
+    
+      function handleDragEnter(e) {
+        this.classList.add('over');
+      }
+    
+      function handleDragLeave(e) {
+        this.classList.remove('over');
+      }
+    
+      function handleDrop(e) {
+        if (e.stopPropagation) {
+          e.stopPropagation(); // stops the browser from redirecting.
+    
+         
+        }
+        
+        if (dragSrcEl != this) {
+          dragSrcEl.innerHTML = this.innerHTML;
+          this.innerHTML = e.dataTransfer.getData('text/html');
+        }
+        
+        return false;
+      }
+    
+      function handleDragEnd(e) {
+        this.style.opacity = '1';
+        
+        items.forEach(function (item) {
+          item.classList.remove('over');
+        });
+      }
+      
+      
+      let items = document.querySelectorAll('.container .box');
+      items.forEach(function(item) {
+        item.addEventListener('dragstart', handleDragStart, false);
+        item.addEventListener('dragenter', handleDragEnter, false);
+        item.addEventListener('dragover', handleDragOver, false);
+        item.addEventListener('dragleave', handleDragLeave, false);
+        item.addEventListener('drop', handleDrop, false);
+        item.addEventListener('dragend', handleDragEnd, false);
+      });
+    });
+    </script>
+    
+<div class="container">
+
+    <!--  breadcrumb -->
+    <div class="breadcrumb-area justify-between py-0 sm:flex mb-8">
+        <div> 
+            <h3 class="md:text-2xl text-lg font-semibold mb-2"> {{ title }} </h3>
+            <div class="breadcrumb">
+                <ul class="m-0">
+                    <li>
+                        <a href="{% url 'management:index' %}"> <i class="icon-feather-home"></i> </a>
+                    </li>
+                    <li class="active">
+                        <a href="#">{{ title }}</a>
+                    </li>
+                </ul> 
+            </div>
+        </div>
+      
+    </div>
+    
+    <div class="flex items-center space-x-3 mb-6">
+        <h1 class="font-medium text-xl flex-1"> {{ title }} Yönet</h1> 
+        <div class="">
+          <button class="button" type="button" uk-toggle="target: #modal-close-default">Yeni Kategori Ekle</button>
+        </div>
+    </div>
+    <div class="space-y-2 md:m-0 -mx-3">
+        <div id="container">
+
+        {% for c in category_list %}
+        <div draggable="true" id="{{ c.id }}" style="padding: 3px;" class="box">
+        <div class="bg-white md:flex font-medium items-center p-4 rounded-md shadow-sm hover:shadow-md md:space-x-5 relative">
+
+            <div class="flex-1 md:m-0 ml-14"> 
+                <h2 class="font-semibold text-base line-clamp-1"> {{ c.name }} </h2>
+            </div>
+            
+            <div class="flex md:justify-end justify-between md:m-0 mt-2 md:space-x-10 ml-14">
+                <div>  
+                    <div class="text-sm">Blog Yazısı</div>
+                    <div class="font-medium md:mt-1 md:text-base"> {{ c.get_blog_count }} </div>
+                </div>
+                <div>
+                    <a href="#" class="flex items-center justify-center h-10 w-10 rounded-full hover:bg-gray-100" aria-expanded="false"> 
+                        <ion-icon name="ellipsis-horizontal" class="text-xl md hydrated" role="img" aria-label="ellipsis horizontal"></ion-icon>
+                      </a>
+                      <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small; offset:5">
+                        <ul class="space-y-1">
+                           
+                            <li> 
+                                <a href="{% url 'management:edit-category' id=c.id %}" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                  <ion-icon name="create-outline" class="pr-2 text-xl md hydrated" role="img" aria-label="create outline"></ion-icon>  Düzenle
+                                </a> 
+                            </li>
+                            <li>
+                              <hr class="-mx-2 my-2 dark:border-gray-800">
+                            </li>
+                            <li> 
+                                <a href="{% url 'management:delete-category' id=c.id %}" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-50 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                                  <ion-icon name="trash-outline" class="pr-2 text-xl md hydrated" role="img" aria-label="trash outline"></ion-icon>  Sil
+                                </a> 
+                            </li>
+                          </ul>
+                      </div>
+                </div>
+            </div>
+
+        </div> 
+    </div>
+        {% endfor %}
+        
+    </div> 
+</div>
+</div>
+
+<div id="modal-close-default" uk-modal="" class="uk-modal" >
+    <div class="uk-modal-dialog uk-modal-body rounded-md shadow-2xl">
+        <button class="uk-modal-close-default bg-gray-300 p-2 rounded-full m-3 uk-icon uk-close" type="button" uk-close=""><svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" data-svg="close-icon"><line fill="none" stroke="#000" stroke-width="1.1" x1="1" y1="1" x2="13" y2="13"></line><line fill="none" stroke="#000" stroke-width="1.1" x1="13" y1="1" x2="1" y2="13"></line></svg></button>
+        <h2 class="mb-2 uk-modal-title">Kategori Ekle</h2>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div >
+                <label for="cat_name" class="font-medium self-start"> Kategori Adı <span class="text-red-600">*</span></label>
+                <input type="text" class="with-border" name="cat_name" id="cat_name" placeholder="Kategori Adı">
+                <label for="course_basic" class="font-medium self-center">Kapak Fotoğrafı <span class="text-red-600">*</span> </label>
+                <div class="col-span-2">
+                    <aks-file-upload></aks-file-upload>  
+                </div>
+            </div>
+
+            <div style="padding: 10px; text-align: center;">
+                <button type="submit" class="button" name="addCategory">Kaydet</button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+
+<script>
+        
+    $("#container").sortable({
+          update: function(e, ui) {
+            var index = 0;
+            var new_sira = [];
+            $("#container div").each(function(i, elm) {
+              if (elm.getAttribute("class") == "box"){
+                index +=1;
+                $elm = $(elm); 
+                new_sira.push({id:elm.getAttribute("id"),index:index});
+
+              }
+              
+            });
+
+            var get_container_div = document.getElementById("container");
+            get_container_div.style.opacity = "0.5";
+            get_container_div.style.pointerEvents = "none";
+
+            fetch("{% url 'management:change-index-category' %}", {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}', 
+                  },
+                  body: JSON.stringify({ sira: new_sira }),
+                })
+                  .then(function (response) {
+                    return response.json();
+                  })
+                  .then(function (data) {
+                    if (data.success) {
+                      alert("{% trans 'Sıralama başarıyla kaydedildi!' %}");
+                      get_container_div.style.opacity = "1";
+                      get_container_div.style.pointerEvents = "auto";
+                    } else {
+                      alert("{% trans 'Sıralama kaydedilirken bir hata oluştu!' %}");
+                      get_container_div.style.opacity = "1";
+                      get_container_div.style.pointerEvents = "auto";
+                    }
+                  })
+                  .catch(function (error) {
+                    alert("{% trans 'Sıralama kaydedilirken bir hata oluştu!' %}");
+                    get_container_div.style.opacity = "1";
+                    get_container_div.style.pointerEvents = "auto";
+                  });
+          }
+        });
+</script>
+
+<script src="{% static 'course/assets/js/aksfileupload.js' %}"></script>
+<script>
+    $(function () {
+        $("aks-file-upload").aksFileUpload({
+            fileUpload: "#uploadfile",
+            dragDrop: true,
+            maxSize: "1 MB",
+            multiple: false,
+            maxFile: 1
+        });
+    });
+</script>
+
+{% endblock %}

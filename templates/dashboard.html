@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3>Kontrol Paneli</h3><br>
+<h6>{{request.user.email}} ile değişiklik yapmaktasınız</h6>
+<hr><br><br>
+
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+
+            <div class="">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="p-10 text-center">
+                        <i class="fas fa-user" ></i>
+                        <h5 class="mb-0 mt-1">{{user_count}}</h5>
+                        <small class="font-light">Toplam Kullanıcı</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-10 text-center">
+                        <i class="fas fa-user-plus" ></i>
+                        <h5 class="mb-0 mt-1">{{new_user_count}}</h5>
+                        <small class="font-light">Yeni Kullanıcı</small>
+                        </div>
+                    </div>
+
+                    <div class="col-6 mt-3">
+                        <div class="p-10 text-center">
+                        <i class="fas fa-screwdriver-wrench" ></i>
+                        <h5 class="mb-0 mt-1">{{tool_count}}</h5>
+                        <small class="font-light">Toplam Araç</small>
+                        </div>
+                    </div>
+                    <div class="col-6 mt-3">
+                        <div class="p-10 text-center">
+                        <i class="fas fa-magnifying-glass-chart" ></i>
+                        <h5 class="mb-0 mt-1">{{post_count}}</h5>
+                        <small class="font-light">Toplam Gönderi</small>
+                        </div>
+                    </div>
+                    <div class="col-6 mt-3">
+                        <div class="p-10 text-center">
+                        <i class="fas fa-signs-post" ></i>
+                        <h5 class="mb-0 mt-1">{{forum_category_count}}</h5>
+                        <small class="font-light">Forum Kategorisi</small>
+                        </div>
+                    </div>
+                    <div class="col-6 mt-3">
+                        <div class="p-10 text-center">
+                        <i class="fas fa-comment" ></i>
+                        <h5 class="mb-0 mt-1">{{thread_count}}</h5>
+                        <small class="font-light">Konu Başlığı</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+
+            <div class="card mb-4 mb-lg-0 h-100">
+                <div class="card-body p-0">
+                    <br>
+                    {% if reported_comments %}
+                        <div class="text-start">
+                            {% for comment in reported_comments %}
+                            &emsp; <a class="text-start" 
+                            href="{% url 'forum:forum' category_id=comment.thread_id.category.category_id subcategory_id=comment.thread_id.subcategory.subcategory_id thread_id=comment.thread_id %}" 
+                            style="font-size: small;"> > {{ comment.owner }} / {{ comment.posts_comment_id }} / {{ comment.post_id.title }} </a><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <br><br><br>
+                        <div class="text-center" style="font-size: medium;">Yeni şikayet yoktur</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col">
+
+            <div class="card mb-4 mb-lg-0 h-100">
+                <div class="card-body p-0">
+                    <br>
+                    {% if contact_forms %}
+                        <div class="text-start">
+                            {% for contact_form in contact_forms %}
+                            &emsp; <a class="text-start" href="{% url 'forum:contact_data' id=contact_form.contact_id %}" style="font-size: small;">
+                                > {{ contact_form.title }} / {{ contact_form.email }} </a><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <br><br><br>
+                        <div class="text-center" style="font-size: medium;">Doldurulan iletişim formu yoktur</div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock body %}

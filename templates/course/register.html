@@ -1,0 +1,139 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<html lang="en">
+<head>
+  <title>{{ title }} | Yapay Arşiv</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Courseplus is - Professional A unique and beautiful collection of UI elements">
+
+  <!-- Favicon -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="{{ get_general_settings.fav_icon }}" rel="icon" type="image/png">
+
+  <link rel="stylesheet" href="{% static 'course/assets/css/icons.css' %}">
+  <link rel="stylesheet" href="{% static 'course/assets/css/uikit.css' %}">
+  <link rel="stylesheet" href="{% static 'course/assets/css/style.css' %}">
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    input , .bootstrap-select.btn-group button{
+        background-color: #f3f4f6  !important;
+        height: 44px  !important;
+        box-shadow: none  !important; 
+    }
+  </style>
+<style>
+.content{
+    padding: 12px 56px;
+    border: 1px solid gray;
+    place-items: center;
+    border-radius: 50px;
+    transition: 0.5s;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    align-items: center;
+    color: #3d4055;
+    background: #fff;
+    width: auto;
+    text-align: center;
+}
+
+.googleimg {
+  height: 20px;
+  margin: 0 6px 0 0;
+}
+
+.content:hover{
+    cursor: pointer;
+    background-color: rgb(236, 236, 236);
+}
+
+.m-0 li {
+    color: red;
+}
+</style>
+</head>
+<body>
+
+  <div id="wrapper" class="flex flex-col justify-between h-screen">
+
+      <!-- header-->
+      <div class="bg-white py-4 shadow dark:bg-gray-800">
+          <div class="max-w-6xl mx-auto">
+
+
+              <div class="flex items-center lg:justify-between justify-around">
+
+                  <a href="#">
+                      <img src="{{ get_general_settings.logo }}" alt="" class="w-32">
+                  </a>
+
+                  <div class="capitalize flex font-semibold hidden lg:block my-2 space-x-3 text-center text-sm">
+                      <a href="{% url 'login' %}{% if get_next %}?next={{ get_next }}{% endif %}" class="py-3 px-4">Giriş Yap</a>
+                      <a href="{% url 'register' %}{% if get_next %}?next={{ get_next }}{% endif %}" class="bg-purple-500 purple-500 px-6 py-3 rounded-md shadow text-white">Kayıt Ol</a>
+                  </div>
+
+              </div>
+
+
+          </div>
+      </div>
+
+      <!-- Content-->
+      <div>
+        {% if messages %}
+        <div class="container">
+        {% for message in messages %}
+        <div class="bg-blue-50 border-blue-300 border px-4 py-2 rounded text-blue-900 text-sm mb-6">
+            <ion-icon class="text-sm" name="information-circle-outline"></ion-icon>&nbsp;{{ message }}
+           </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+        <div class="lg:p-12 max-w-xl lg:my-0 my-12 mx-auto p-6 space-y-">
+            
+            <form method="post" class="lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md">
+                <h1 class="lg:text-2xl text-xl font-semibold mb-6"> Kayıt Ol </h1>
+                {% csrf_token %}
+                {{form|crispy}}
+                <div>
+                    <p>Kayıt ol butonuna basarak <strong><a href="https://kurs.yapayarsiv.com/gizlilik-politikasi/" target="_blank">Kullanım Koşullarını ve Gizlilik Politikasını</a>&nbsp;</strong>kabul ediyorum.</p>
+                    <button type="submit" class="bg-blue-600 font-semibold p-2.5 mt-5 rounded-md text-center text-white w-full">
+                        Kayıt Ol</button>
+                </div>
+
+                <div class="uk-heading-line uk-text-center py-5"><span> Veya </span></div>
+
+                <div class="col-md-12 offset-md-12">
+                <div style="text-align: center;">
+                    <a style="display: inline-block;" href="{% url 'social:begin' 'google-oauth2' %}" class="content"> 
+                      <span style="display: inline-block; vertical-align: middle;"> <img class="googleimg" src="https://freesvg.org/img/1534129544.png" alt="google"/> 
+                       </span>Google İle Giriş Yap
+                      </a>
+                  </div>
+                </div>
+
+            </form>
+
+        </div>
+    
+      </div>
+      {% include 'course/footer.html' %}
+  </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{% static 'course/assets/js/uikit.js' %}"></script>
+    <script src="{% static 'course/assets/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'course/assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'course/assets/js/custom.js' %}"></script>
+    <script src="{% static 'course/assets/js/bootstrap-select.min.js' %}"></script>
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+
+</body>
+
+</html>

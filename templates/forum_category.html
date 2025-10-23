@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/forum_style.css' %}">
+    <title>Yapay Arşiv</title>
+
+    <style>
+        h1, h2, h3, h4, h5, h6, nav {
+        font-family: 'Figtree', sans-serif;
+        font-weight: 700;
+        }
+        p {
+            font-family: 'Figtree', sans-serif;
+            font-weight: 400;
+        }
+        a {
+            text-decoration: none;
+        }
+    </style>
+        <style>
+            body{
+              background-color: #F5F5F7;
+            }
+          </style>
+</head>
+
+<body class="text-center">
+    
+    <div class="flex-column">
+      <header class="mb-auto">
+        text-white bg-dark
+        <div>
+          {% include "includes/navbar.html" %}
+        </div>
+      </header>
+
+        <div style="margin-top: 50px;" class = "container">
+
+        <!-- FORUM -->
+
+        <div class="container mt-5">
+            <!-- <h1 class="text-center">Yapay Arşiv Forum</h1>
+            <hr><br><br> -->
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- Title List -->
+                    <div class="mb-3">
+                        <h2>Alt Başlıklar</h2>
+                        <br>
+                        <div class="text-lg-start">
+                            <a type="button" href="{% url 'forum:forum' %}" class="btn btn-outline-secondary">Geri</a>
+                        </div><br>
+                        {% if subcategories %}
+                        {% for subcategory in subcategories %}
+                        <div class="card mt-2 text-lg-start">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+
+                                        <h5 class="card-title border-bottom" style="color: #000000;">
+                                            <i class="fas fa-comment" style="color: #474747;"></i>
+                                            <a href="{% url 'forum:forum_subcategory' category_id=category_id subcategory_id=subcategory.subcategory_id %}">
+                                                {{subcategory.subcategory_name}} 
+                                            </a>
+                                        </h5>
+
+                                        <p class="card-text" style="color: #000000;">
+                                            &emsp;{{subcategory.subcategory_explanation}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="alert alert-danger">
+                            Henüz oluşturulmuş bir alt kategori bulunmamaktadır..
+                        </div>
+                        {% endif %}
+
+                        <!-- End of Forum Categories -->
+                    </div>
+                </div>
+                
+
+                <div class="col-md-4">
+                    <!-- Right Bar -->
+
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- FORUM -->
+
+
+    </div>
+    <br><br><br>
+</div>
+
+</body>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+</html>

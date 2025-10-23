@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+<style>
+.content{
+    padding: 12px 56px;
+    border: 1px solid gray;
+    place-items: center;
+    border-radius: 50px;
+    transition: 0.5s;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    align-items: center;
+    color: #3d4055;
+    background: #fff;
+    width: auto;
+    text-align: center;
+}
+
+.googleimg {
+  height: 20px;
+  margin: 0 6px 0 0;
+}
+
+.content:hover{
+    cursor: pointer;
+    background-color: rgb(236, 236, 236);
+}
+</style>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+
+        <h3>Kayıt Ol</h3><br>
+    </div>
+    <div class="col-md-4 offset-md-4">
+            
+        <form method="post">
+
+            {% if messages %}
+
+                    
+            {% for message in messages %}
+            <div class="alert-info">
+                {{ message }}
+            </div>
+            {% endfor %}
+        
+        {% endif %}
+
+            {% csrf_token %}
+            {{form|crispy}}
+            <br>
+            <p>Kayıt ol butonuna basarak <strong><a href="https://yapayarsiv.com/kullanim-kosullari/" target="_blank">Kullanım Koşullarını</a>&nbsp;</strong>kabul ediyorum.</p>
+            <button type="submit" class="btn btn-success">Kayıt Ol</button>
+            <br><br>
+<div style="text-align: center;">
+              <a href="{% url 'social:begin' 'google-oauth2' %}" class="content"> 
+                <span> <img class="googleimg" src="https://freesvg.org/img/1534129544.png" alt="google"/> 
+                 Google İle Giriş Yap</span>
+                </a>
+            </div>
+<br>
+            <p>Zaten bir hesabın var mı?&nbsp;<strong><a href="https://yapayarsiv.com/kullanici/giris/">Giriş Yap</a></strong></p>
+
+        
+        </form>
+
+    </div>
+</div>
+<br><br><br><br>
+
+
+{% endblock body %}
+

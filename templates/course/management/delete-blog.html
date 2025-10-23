@@ -1,0 +1,47 @@
+{% extends 'course/management/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+
+    <div class="lg:w-11/12 mx-auto">
+
+        <div class="flex items-center mb-10" >
+            <a href="#" onclick="goBack()" class="-ml-2 inline-flex p-1.5 text-xl">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </a>
+            <h3 onclick="goBack()" style="cursor: pointer;" class="font-semibold md:text-xl text-lg">  Geri dön</h3>
+            
+        </div>
+
+        <div class="bg-white rounded-md shadow">
+
+            <h3 class="px-8 pt-5 mb-2 text-lg font-semibold">  {{ title }}</h3>
+            
+            <form method="POST">
+                {% csrf_token %}
+            <div class="bg-whit border-t-4 border-red-600 p-5 shadow-lg relative rounded-md uk-alert" uk-alert="">
+                <h3 class="text-lg font-semibold mt-1">Blog Silmeyi Onayla </h3>
+                <p style="padding-top: 10px;padding-bottom: 10px;">Bu blog silindiğinde geri alınamaz.</p>
+                <span><b>{{ get_blog.title }}</b>, başlıklı blog'u kalıcı olarak siliyorsunuz</span>
+            
+                <div class="flex space-x-2 items-center justify-end mt-2">
+                    <button onclick="goBack()" type="button" class="uk-alert-close py-2 px-4 rounded-md font-semibold"> İptal</button>
+                    <button type="submit" name="deleteBlog" class="bg-red-100 text-red-600 py-2 px-4 rounded-md font-semibold "> Blog'u Sil </button>
+                </div>
+            </div>
+        </form>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    function goBack() {
+      window.history.back();
+    }
+</script>
+{% endblock %}

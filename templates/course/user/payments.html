@@ -1,0 +1,108 @@
+{% extends 'course/base.html' %}
+
+{% block content %}
+<div class="container md:space-y-10 space-y-6">
+
+    <!--  breadcrumb -->
+    <div class="breadcrumb-area py-0 justify-between sm:flex">
+        <div> 
+            <h3 class="md:text-2xl text-lg font-semibold mb-2"> {{ title }} </h3>
+        </div>
+    </div> 
+    <div class="bg-white shadow rounded-md overflow-auto">
+
+        <div class="items-end justify-between p-5 sm:flex -mt-2 mb-2">
+            <h3 class="font-medium  text-gray-600">{{ blog_count }} Ödeme Kaydı {% if q %}, <b>{{ q }}</b> için arama sonuçları <a style="color: rgb(32, 128, 253);" href="{% url 'user:payments' %}">Sonuçları Sıfırla</a>{% endif %} </h3>
+            <form method="get">
+            <div class="bg-white border flex items-center overflow-hidden relative rounded-lg">
+                <i class="pl-4 -mr-2 relative uil-search"></i>
+                <input class="flex-1 max-h-10" placeholder="Sipariş numarası ara" name="q" {% if q %}value="{{ q }}"{% endif %} type="text">
+            </div>
+Kurs üyeliğinizin sona ermesine {{ end_permission }} gün kaldı.
+        </form>
+        </div>
+
+        <table class="sm:table-fixed w-full border-b">
+            <thead>
+                <tr class="border-b bg-gray-50 text-base text-black">
+                    <th class="w-6/12 p-3 font-medium">Sipariş Numarası</th>
+                    <th class="w-6/12 p-3 font-medium" style="text-align: center;">Durum</th>
+                    <th class="w-6/12 p-3 font-medium">Tutar</th>
+                    <th class="w-6/12 p-3 font-medium">Tarih</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in payments %}
+                <tr>
+                    <td class="p-3">{{ b.merchant_oid }}</td>
+                    <td class="p-3" style="text-align: center;">
+                        {% if b.status %}
+                        <span class="bg-green-100 text-green-600 font-semibold px-3 py-1 rounded-full text-sm">Ödeme Yapıldı</span>
+                        {% else %}
+                        <span class="bg-red-100 text-red-600 font-semibold px-3 py-1 rounded-full text-sm">Ödeme Başarısız</span>
+                        {% endif %}</td>
+                    <td class="p-3">{{ b.amount }} TL</td>
+                    <td class="p-3">{{ b.date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="flex items-center justify-between sm:flex-row flex-col mt-2 p-6">
+            <p class="mb-3"> {{ showing_title }} </p>
+
+
+
+            <div class="pagination-container">
+                <nav class="pagination">
+                    <ul class="pagination">
+    
+                      
+                     
+                      
+                      
+                        
+                       
+                        
+                        </ul>
+                </nav>
+            </div>
+
+
+
+            <div class="border divide-x flex font-medium items-center rounded-md text-gray-600">
+
+                {% if blogs.has_previous %}
+                <a href="?page={{ blogs.previous_page_number }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-5 hover:bg-gray-100"> Geri</a> 
+                {% endif %}
+
+                {% if blogs.number|add:'-3' > 1 %}
+                <a href="?page={{ blogs.number|add:'-4' }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 bg-gray-100">&hellip;</a> 
+                {% endif %}
+  
+                {% for i in blogs.paginator.page_range %}
+                {% if blogs.number == i %}
+                <a  class="py-2 px-3 bg-gray-100">{{ i }}</a> 
+
+                {% elif i > blogs.number|add:'-4' and i < blogs.number|add:'4' %}
+                    <a href="?page={{ i }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 hover:bg-gray-100"> {{ i }}</a> 
+                    {% endif %}
+                {% endfor %}
+                  
+                {% if blogs.paginator.num_pages > blogs.number|add:'3' %}
+                <a href="?page={{ blogs.number|add:'4' }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-3 hover:bg-gray-100">&hellip;</a> 
+                {% endif %}
+                
+                {% if blogs.has_next %}
+                <a href="?page={{ blogs.next_page_number }}{% if q %}&q={{q}}{% endif %}" class="py-2 px-5 hover:bg-gray-100"> İleri</a> 
+            
+                {% else %}
+            {% endif %}
+             
+            </div>
+        </div>
+
+    </div>  
+
+</div>
+{% endblock %}

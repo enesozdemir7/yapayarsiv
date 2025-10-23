@@ -1,0 +1,155 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Yapay Arşiv Akademi, Türkiye'nin en kapsamlı yapay zeka eğitim platformudur. Yapay zekanın her alanından etkileşimli eğitimler alabileceğiniz ilk yapay zeka eğitim topluluğudur.">
+    
+        <!-- Favicon -->
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="{% static 'course/assets/css/icons.css' %}">
+        <link rel="stylesheet" href="{% static 'course/assets/css/uikit.css' %}">
+        <link rel="stylesheet" href="{% static 'course/assets/css/style.css' %}">
+        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="shortcut icon" type="image/png" href="https://yapayarsiv.com/static/icon/favicon.ico">
+    </head>
+    <body style="background-color: #f9f7f7;">
+            <div class="container" style="padding-top: 40px; background-color: #f9f7f7;">
+               
+                
+                <div class="max-w-3xl mx-auto">
+                    <div class="flex items-center mb-10">
+                        <a href="https://egitim.yapayarsiv.com/" class="-ml-2 inline-flex p-1.5 text-xl">
+                            <ion-icon name="chevron-back-outline"></ion-icon>
+                        </a>
+                       <a href="https://egitim.yapayarsiv.com/"> <h3 style="cursor: pointer;" class="font-semibold md:text-xl text-lg">Tanıtım Sayfası</h3></a>
+                    </div>
+                    {% if messages %}
+                    <div class="container">
+                    {% for message in messages %}
+                    <div class="bg-blue-50 border-blue-300 border px-4 py-2 rounded text-blue-900 text-sm mb-6">
+                        <ion-icon class="text-sm" name="information-circle-outline"></ion-icon>&nbsp;{{ message }}
+                       </div>
+                    {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="mt-5 pt-6 space-y-6">
+
+                        <div class="flex justify-between px-6">
+                            <div class="flex-2 min-w-0">
+                                <h1 class="text-lg font-medium"> Toplam </h1>
+                                <p> Tek ödeme ile kurs.yapayarsiv.com adresine <strong>365 gün</strong> erişim sağlayın. </p>
+                            </div>
+                            <h5 class="font-semibold text-black text-xl"><strike>5000 TL</strike> {% if user_c %} <strike>{{ course_site_price|floatformat:2 }} TL</strike> {{ course_site_price_new|floatformat:2 }} TL{% else %}{{ course_site_price|floatformat:2 }} TL{% endif %} </h5>
+                        </div>
+
+                        <div class="px-6 pb-5">
+
+                            <div class="bg-white rounded-md shadow-md">
+                                
+                                <ul class="space-y-0 rounded-md uk-accordion" uk-accordion="">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title border-b py-4 px-6" href="#"> <div class="flex items-center text-base font-semibold"> <ion-icon name="card-outline" class="mr-2 md hydrated" role="img" aria-label="card outline"></ion-icon>Kart İle Ödeme Yap</div> </a>
+                                        <div class="uk-accordion-content py-6 px-8 mt-0 border-b" aria-hidden="false">
+                                            {% if request.user.is_authenticated %}
+                                            <form class="grid sm:grid-cols-4 gap-4 mt-3" method="post">
+                                                {% csrf_token %}
+                                                {% if user_c %}
+                                                <div class="col-span-4">
+                                                {% if user_c.coupon.discount_percent %}<b>{{ user_c.coupon.discount_percent }}%</b> İndirim Kuponu Uygulandı{% elif user_c.coupon.discount_amount %}{{ user_c.coupon.discount_amount }}TL İndirim Kuponu{% endif %}
+                                                </div>
+
+                                                <div class="col-span-2">
+                                                    <input type="text" name="coupon_code" placeholder="Kupon kodu" readonly value="{{ user_c.coupon.code }}" required class="with-border">
+                                                </div>
+                                                <div class="col-span-2 border rounded-md border-red-500"> 
+                                                    <button class="w-full py-3 font-semibold rounded text-red-500 text-base block" type="submit" name="removeCouponCodeButton"><b style="padding: 10px;">Kuponu Kaldır</b></button>
+                                                </div>
+                                                {% else %}
+                                                <div class="col-span-2">
+                                                    <input type="text" name="coupon_code" placeholder="Kupon kodu" required class="with-border">
+                                                </div>
+                                                <div class="col-span-2 border rounded-md border-gray-900"> 
+                                                    <button class="w-full py-3 font-semibold rounded text-gray-700 text-base block" type="submit" name="couponCodeButton">Kuponu Uygula</button>
+                                                </div>
+                                                {% endif %}
+                                            </form>
+                                            <form class="grid sm:grid-cols-4 gap-4 mt-3" method="post">
+                                                {% csrf_token %}
+                                               
+                                                <div class="col-span-4">
+                                                    <input type="text" name="payment_address" placeholder="Adres" required class="with-border">
+                                                </div>
+                                                <div class="col-span-2">
+                                                    <input type="text" name="payment_country" placeholder="Ülke" required class="with-border">
+                                                </div>
+                                                <div class="col-span-2"> 
+                                                    <input type="text" name="payment_zip_code" placeholder="Posta Kodu" required class="with-border">
+                                                </div>
+                                                <div class="col-span-4">
+                                                    <div class="checkbox">
+                                                        <input type="checkbox" name="delivery_and_return" id="chekcbox1" required>
+                                                        <label for="chekcbox1"><span class="checkbox-icon"></span> <strong><a href="{% url 'delivery_and_return' %}" target="_blank">Teslimat Ve İade Politikasını</a>&nbsp;</strong> okudum ve kabul ediyorum.</label>
+                                                    </div>
+                                                    <strong style="display: none;" class="text-red-500" id="error_text">Lütfen teslimat ve iade politikasını kabul ettiğiniz doğrulayın.</strong>
+                                                </div>
+                                                <div class="col-span-1"></div>
+
+                                                <div class="col-span-2 border rounded-md border-blue-500">
+                                                    <button class="w-full py-3 font-semibold rounded text-blue-600 text-base block" onclick="formCheck()" type="submit" name="paymentPayTR">Ödeme Sayfası ({{ course_site_price_new|floatformat:2 }} TL)</button>
+                                                </div>
+                                                <div class="col-span-1"></div>
+                                                
+                                            </form>
+                                            <script>
+                                                function formCheck(){
+                                                    
+                                                    if(document.getElementById("chekcbox1").checked == false){
+                                                            document.getElementById("error_text").style.display = "block";
+                                                    }else{
+                                                        document.getElementById("error_text").style.display = "none";
+                                                        
+                                                    }
+                                                }
+                                            </script>
+                                            {% else %}
+                                            <div style="text-align: center;">
+                                            <div style="padding: 5px;">Lütfen ilk önce giriş yapınız.</div>
+                      <a href="{% url 'login' %}?get_next=join" class=" button py-3 px-4" style="color: white;">Giriş Sayfası</a>
+
+                                            </div>
+                                            {% endif %}
+                
+                                        </div>
+                                    </li>
+                                </ul>
+                
+                            </div>
+                        </div>
+                    </div>
+
+
+        
+                </div>
+                
+            {% include 'course/footer.html' %}
+        
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="{% static 'course/assets/js/uikit.js' %}"></script>
+        <script src="{% static 'course/assets/js/tippy.all.min.js' %}"></script>
+        <script src="{% static 'course/assets/js/simplebar.js' %}"></script>
+        <script src="{% static 'course/assets/js/custom.js' %}"></script>
+        <script src="{% static 'course/assets/js/bootstrap-select.min.js' %}"></script>
+        <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+        <script>
+            function goBack() {
+              window.history.back();
+            }
+        </script>
+    </body>
+</html>
