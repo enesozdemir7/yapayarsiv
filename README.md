@@ -6,5 +6,5 @@ Yapay Arşiv sitesinde yer alan **Hızlı Öğren** bölümü, pratik yapay zek�
 Bu bölümde; üretken yapay zekâ araçlarının kullanımı, görsel ve metin tabanlı uygulamalarla ilgili uygulamlı eğitim yazıları bulunmaktadır.
 <img width="1918" height="913" alt="image" src="https://github.com/user-attachments/assets/4b134b6c-af2d-40c0-bfa8-d0fd9a6d08f4" />
 
-Aşağıda Yapay Arşiv Akademi web sitesinde yer alan yapay zeka uygulamaları tanıtım videolarına ait bir bölümün ekran görüntüsü:
+Aşağıda Yapay Arşiv Akademi web sitesinde yer alan yapay zeka uygulamaları tanıtım videolarına ait bir bölüm:
 <img width="676" height="656" alt="image" src="https://github.com/user-attachments/assets/69fa67dd-395a-413f-970e-a01ad4a1db69" />
